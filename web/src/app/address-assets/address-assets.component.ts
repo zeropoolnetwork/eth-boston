@@ -14,7 +14,7 @@ export class AddressAssetsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.selectedAddress =this.addresses[0];
+    this.selectedAddress = this.addresses[0];
   }
 
 }

@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="col-12">
+    <app-header></app-header>
+    <p class="good-header">
+      Setup Anonymous Account <br> on BabyJubJub Elliptic Curve
+    </p>
+    <div class="form-group col-12 pt-4">
+      <label for="address">Enter mnemonic</label>
+      <textarea class="form-control" type="text" rows="5" id="address" aria-describedby="address" placeholder=""
+                [(ngModel)]="mnemonic" required></textarea>
+    </div>
+    <div class="btn-group-lg pt-4">
+      <button class="btn btn-outline btn-lg" (click)='generateWallet()'>Generate Wallet</button>
+      <button class="btn btn-outline btn-lg" (click)='importWallet()'>Import Wallet</button>
+      <button class="btn btn-outline btn-lg" (click)='goToDashboard()'>Next</button>
+    </div>
+  </div>
+</div>

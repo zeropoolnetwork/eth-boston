@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  subState: 'deposit' | 'withdraw' | 'transfer' | '' = '';
+  isApproved = false;
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
+  approveAsset() {
+    this.isApproved = true;
+  }
 }
