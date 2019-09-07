@@ -18,6 +18,11 @@
   <script src="assets/js/inputs.js"></script>
   <script src="assets/js/utils.js"></script>
   <script src="assets/js/merkleTree.js"></script>
+  <script>
+      let pk;
+      fetch("assets/transactions/pk").then(data => {data.arrayBuffer().then(d => pk = d)})
+  </script>
+
   <script src="assets/js/index.js"></script>
 </body>
 </html>
