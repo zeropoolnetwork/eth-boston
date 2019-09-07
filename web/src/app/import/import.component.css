@@ -1,0 +1,36 @@
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .wizard-container {
+    align-items: center;
+  }
+
+  .wizard {
+    width: 500px
+  }
+}
+
+@media (max-width: 600px) {
+  .wizard-container {
+    align-items: flex-start;
+  }
+
+  .wizard {
+    width: 100%
+  }
+
+  .address-input {
+    width: 100%
+  }
+}

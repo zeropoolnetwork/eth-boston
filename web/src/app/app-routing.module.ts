@@ -23,20 +23,20 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    children: [
-      {
-        path: 'deposit',
-        component: DepositComponent
-      },
-      {
-        path: 'transfer',
-        component: TransferComponent
-      },
-      {
-        path: 'withdraw',
-        component: WelcomeComponent
-      },
-    ]
+    // children: [
+    //   {
+    //     path: 'deposit',
+    //     component: DepositComponent
+    //   },
+    //   {
+    //     path: 'transfer',
+    //     component: TransferComponent
+    //   },
+    //   {
+    //     path: 'withdraw',
+    //     component: WelcomeComponent
+    //   },
+    // ]
   },
   {
     path: '**',
