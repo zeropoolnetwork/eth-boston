@@ -6,7 +6,7 @@ function getDepositData(assetId, amount, owner, transactionJSON, proverKey) {
 
 // utxos - all outputs from smart contract events
 // utxoToAsset - two indexes of withdrawal utxos
-function getWithdrawalData(proverKey, transactionJSON, /*array*/utxos, /*array*/mp_path, receiver, amount) {
+function getWithdrawalData(privateKey, proverKey, transactionJSON, /*array*/utxos, /*array*/mp_path, receiver, amount) {
   const merkleTree = getState(utxos);
   const mp_sibling = mp_path.map(e => merkleTree.proof(e));
   const asset = utxos[mp_path[0]].assetId + ((amount / 2n) << 16n);
@@ -14,9 +14,9 @@ function getWithdrawalData(proverKey, transactionJSON, /*array*/utxos, /*array*/
   const utxo_in = mp_path.map(i => utxos[i]);
 
   let res = snark.withdrawalPreCompute({ asset, receiver, utxo_in, mp_sibling, mp_path, root });
-  res = snark.addSignatures(BigInt.leBuff2int((new Blob([JSON.stringify(proverKey, null, 2)], {type : 'application/json'}))), res);
+  res = snark.addSignatures(privateKey, res);
   const { inputs } = snark.withdrawalCompute(res);
-  return snarkUtils.proof(inputs, transactionJSON, BigInt.leBuff2int((new Blob([JSON.stringify(proverKey, null, 2)], {type : 'application/json'}))));
+  return snarkUtils.proof(inputs, transactionJSON, proverKey);
 }
 
 function getState(/*array*/utxoHashes) {

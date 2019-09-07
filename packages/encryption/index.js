@@ -17,8 +17,6 @@ function randrange(from, to) {
   return from + bigInt.leBuff2int(crypto.randomBytes(t)) % interval;
 }
 
-
-
 function encrypt(message, pubkey) {
   const privkey = randrange(0n, babyJub.subOrder);
   const sender_pubkey = babyJub.mulPointEscalar(babyJub.Base8, privkey);
