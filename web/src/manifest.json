@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "ZeroPool",
+  "description": "SNARK based anonymous pool",
+  "version": "0.0.1",
+  "browser_action": {
+    "default_icon": {
+      "128": "assets/img/1200px-Anonymous.png"
+    },
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
