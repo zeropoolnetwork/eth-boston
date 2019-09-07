@@ -59,15 +59,15 @@
 				"type": "bytes32"
 			}
 		],
-		"name": "test",
+		"name": "setData",
 		"outputs": [
 			{
 				"name": "",
 				"type": "bool"
 			}
 		],
-		"payable": false,
-		"stateMutability": "nonpayable",
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
