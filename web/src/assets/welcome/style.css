@@ -1,0 +1,228 @@
+.content-container * {
+	font-family: "geneva";
+	margin: 0;
+	box-sizing: border-box;	
+}
+
+p, 
+a, 
+button, 
+select, 
+textarea, 
+label,
+input {
+	font-size: 16px;
+}
+
+.first-screen {
+	/*display: none;*/
+}
+
+.second-screen {
+	display: none;
+	padding-top: 20px;
+}
+
+.third-screen {
+	display: none;
+}
+
+.tab-deposit {
+	display: none;
+}
+
+.tab-private-teansfer {
+	display: none;
+}
+
+.content-container {
+	position: fixed;
+  	left: 50%;
+  	top: 100px;
+  	width: 550px;
+  	height: 100vh;
+	overflow-y: scroll;
+}
+
+.row {
+	margin: 40px 0;
+}
+
+.header {
+	font-size: 40px;
+	letter-spacing: 2px;
+	margin: 0;
+	margin-bottom: 40px;
+}
+
+.button {
+	border: none;
+	border-radius: 2px;
+	padding: 8px 20px;
+	background: #fff;
+}
+
+.button:disabled {
+	color: #5a5a5a;
+}
+
+.button:hover:disabled {
+	cursor: cross;
+}
+
+.github-logo {
+	width: 60px;
+	display: block;
+}
+
+.list-links {
+	list-style: none;
+	padding: 0;
+}
+
+.list-links li {
+	margin-top: 8px;
+}
+
+.list-links a {
+	color: #453f9e;
+}
+
+.second-screen-title {
+	font-size: 30px;
+}
+
+.second-screen-textarea {
+	width: 100%;
+	height: 100px;
+	margin: 20px 0;
+}
+
+.select {
+	display: block;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	font-size: 20px;
+	border-radius: 2px;
+	background: #fff;
+	border: solid 1px rgb(169, 169, 169);
+}
+
+.sub-title {
+	margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.disabled-row {
+    color: #5a5a5a;
+}
+
+.iput-block {
+	margin-bottom: 10px;
+}
+
+.input {
+	width: 100%;
+	border-radius: 2px;
+	border: none;
+	margin-top: 10px;
+	margin-bottom: 30px;
+	padding: 2px 5px;
+	font-size: 16px;
+	border: solid 1px rgb(169, 169, 169);
+}
+
+.text-right {
+	float: right;
+}
+
+.input-hint {
+    color: #d90f0f;
+    margin-top: -27px;
+    font-size: 13px;
+}
+
+@media screen and (max-width: 1200px) {
+	.mask-container {
+		top: 150px;
+	}
+
+	.content-container {
+		width: 48%;
+    	left: 48%;
+    	top: 15px;
+	}
+
+	.tab {
+		padding: 8px 17px;
+  		font-size: 15px;
+	} 
+}
+
+@media screen and (max-width: 480px) {
+	body {
+		background: #a1a1a1;
+	}
+
+	.mask-container {
+		top: 31px;
+		left: -100px;
+		transform: scale(1.7);
+	}
+
+	.content-container {
+		width: auto;
+		min-width: calc(100% - 30px);
+		left: 0;
+		top: 0;
+		padding: 10px;
+		background: rgba(255, 255, 255, 0.7);
+	}
+
+	.row {
+		margin: 30px 0;
+	}
+
+	.header {
+		font-size: 30px;
+		margin-bottom: 20px;
+	}
+
+	.select {
+		margin-bottom: 10px;
+	}
+
+	.second-screen-title {
+		font-size: 20px;
+	}
+}
+
+@media screen and (max-width: 375px) { 
+	.mask-container {
+		top: 100px;
+		left: -100px;
+		transform: scale(2.1);
+	}
+
+	.content-container {
+		padding-top: 30px;
+	}
+}
+
+@media screen and (max-width: 360px) { 
+	.mask-container {
+		top: 31px;
+		left: -100px;
+		transform: scale(1.7);
+	}
+
+	.content-container {
+		padding-top: 10px;
+	}
+
+	.tab {
+		padding: 8px 9px;
+	} 
+}
+
