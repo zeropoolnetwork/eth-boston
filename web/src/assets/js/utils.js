@@ -41781,7 +41781,7 @@ function witness(input, name, transactionJSON) {
 }
 
 let wasmgroth = undefined;
-async function proof(input, name, transactionJSON, pk) {
+async function proof(input, transactionJSON, pk) {
   if (typeof (wasmgroth) === "undefined") {
     wasmgroth = await buildGroth16();
   }
@@ -41794,7 +41794,7 @@ async function proof(input, name, transactionJSON, pk) {
   return { proof, publicSignals: witness.slice(1, circuit.nPubInputs + circuit.nOutputs + 1) };
 }
 
-function verify({ proof, publicSignals }, name, verificationKey) {
+function verify({ proof, publicSignals }, verificationKey) {
   return groth.isValid(verificationKey, proof, publicSignals);
 }
 
