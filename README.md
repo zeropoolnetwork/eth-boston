@@ -19,14 +19,14 @@
 2. Deposit: 0x0, else `Nullifier1` 
 3. Deposit: 0x0, else `Nullifier2` 
 4. `NewLeaf` (*look at  "The generation algorithm UTXO"*) 
-5. `Asset` 
-    а) Deposit: 16bit(assetId) + (64bit(amount) * 2^16) 
-    б) Withrawal: 16bit(assetId) + (64bit(amount) * 2^16) 
-    c) Transfer: `NewLeaf` of the second UTXO 
-6. `OperationId`
-    a) Deposit: `0x0`
-    б) Withrawal: `0x1+receiver`, where receiver is a ETH address for withdrawal.
-    с) Transfer: `0x2`
+5. `Asset`   
+    а) Deposit: 16bit(assetId) + (64bit(amount) * 2^16)    
+    б) Withrawal: 16bit(assetId) + (64bit(amount) * 2^16)     
+    c) Transfer: `NewLeaf` of the second UTXO     
+6. `OperationId`    
+    a) Deposit: `0x0`    
+    б) Withrawal: `0x1+receiver`, where receiver is a ETH address for withdrawal.     
+    с) Transfer: `0x2` .   
     
 ## Push UTXO to smart contract
 **Data:** 
