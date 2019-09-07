@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@ng-select/ng-select/themes/default.theme.css";
 
 input {
   box-shadow: none !important;
@@ -13,6 +12,7 @@ input {
   border: 1px solid black !important;
   box-shadow: none !important;
 }
+
 .btn-outline:hover {
   background: #6a6a6a !important;
   color: white !important;
@@ -22,7 +22,7 @@ input {
   margin: 2px;
   background: black !important;
   color: white !important;
-  border-radius: 0px !important;
+  border-radius: 0 !important;
   border: 1px solid black !important;
   box-shadow: none !important;
 }

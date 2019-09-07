@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-address-assets',
   templateUrl: './address-assets.component.html',
-  styleUrls: ['./address-assets.component.css']
+  styleUrls: ['./address-assets.component.scss']
 })
 export class AddressAssetsComponent implements OnInit {
   addresses = [

@@ -23,8 +23,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "src/assets/css/material-kit.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -132,5 +131,10 @@
       }
     }
   },
-  "defaultProject": "privateh"
+  "defaultProject": "privateh",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
