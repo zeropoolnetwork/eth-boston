@@ -41727,7 +41727,6 @@ module.exports=(witness)=>{
 
 }
 },{"assert":102}],86:[function(require,module,exports){
-(function (__dirname){
 const circomlib = require("circomlib");
 const snarkjs = require("snarkjs");
 const fs = require("fs");
@@ -41775,20 +41774,19 @@ const fload = f => unstringifyBigInts(JSON.parse(fs.readFileSync(f)))
 
 
 
-function witness(input, name) {
-  const circuit = new Circuit(fload(`${__dirname}/../circuitsCompiled/${name}.json`));
+function witness(input, name, transactionJSON) {
+  const circuit = new Circuit(transactionJSON);
   const witness = circuit.calculateWitness(input);
   return witness;
 }
 
 let wasmgroth = undefined;
-async function proof(input, name) {
+async function proof(input, name, transactionJSON, pk) {
   if (typeof (wasmgroth) === "undefined") {
     wasmgroth = await buildGroth16();
   }
 
-  const circuit = new Circuit(fload(`${__dirname}/../circuitsCompiled/${name}.json`));
-  const pk = fload(`${__dirname}/../circuitsCompiled/${name}_pk.json`);
+  const circuit = new Circuit(transactionJSON);
   const witness = circuit.calculateWitness(input);
   const proof = unstringifyBigInts(await wasmgroth.proof(buildwitness(witness), buildpkey(pk)));
   proof.protocol = "groth";
@@ -41796,9 +41794,8 @@ async function proof(input, name) {
   return { proof, publicSignals: witness.slice(1, circuit.nPubInputs + circuit.nOutputs + 1) };
 }
 
-function verify({ proof, publicSignals }, name) {
-  const vk = fload(`./circuitsCompiled/${name}_vk.json`);
-  return groth.isValid(vk, proof, publicSignals);
+function verify({ proof, publicSignals }, name, verificationKey) {
+  return groth.isValid(verificationKey, proof, publicSignals);
 }
 
 function pubkey(pk) {
@@ -41807,7 +41804,6 @@ function pubkey(pk) {
 
 
 _.assign(exports, { randrange, pedersen, witness, fload, verify, pubkey, proof});
-}).call(this,"/")
 },{"./buildpkey.js":84,"./buildwitness.js":85,"circomlib":15,"circomlib/src/babyjub.js":16,"circomlib/src/pedersenHash.js":20,"crypto":146,"fs":87,"lodash":29,"snarkjs":36,"snarkjs/src/stringifybigint":50,"websnark":68}],87:[function(require,module,exports){
 
 },{}],88:[function(require,module,exports){
