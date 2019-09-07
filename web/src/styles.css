@@ -22,7 +22,12 @@ input {
   margin: 2px;
   background: black !important;
   color: white !important;
-  border-radius: 0px !important;
+  border-radius: 0 !important;
   border: 1px solid black !important;
   box-shadow: none !important;
+}
+
+.active {
+  background: black !important;
+  color: white !important;
 }

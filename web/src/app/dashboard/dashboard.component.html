@@ -5,33 +5,37 @@
     <app-header></app-header>
 
     <app-address-assets></app-address-assets>
-    <button>APPROVE</button>
+    <button (click)="approveAsset()">APPROVE</button>
 
+  </div>
+
+  <div *ngIf="isApproved">
     <h3>Your private balance is: 12 pWETH</h3>
     <div>
       <button class="btn btn-outline btn-lg"
+              [ngClass]="{'active': subState==='deposit'}"
               (click)="subState='deposit'">DEPOSIT
       </button>
 
       <button class="btn btn-outline btn-lg"
+              [ngClass]="{'active': subState==='withdraw'}"
               (click)="subState='withdraw'">TRANSFER
       </button>
 
       <button class="btn btn-outline btn-lg"
+              [ngClass]="{'active': subState==='transfer'}"
               (click)="subState='transfer'">WITHDRAW
       </button>
     </div>
 
-  </div>
+    <div [ngSwitch]="subState">
 
-  <div [ngSwitch]="subState">
+      <app-deposit *ngSwitchCase="'deposit'"></app-deposit>
+      <app-transfer *ngSwitchCase="'withdraw'"></app-transfer>
+      <app-withdraw *ngSwitchCase="'transfer'"></app-withdraw>
+      <div *ngSwitchDefault></div>
 
-
-    <app-deposit *ngSwitchCase="'deposit'"></app-deposit>
-    <app-transfer *ngSwitchCase="'withdraw'"></app-transfer>
-    <app-withdraw *ngSwitchCase="'transfer'"></app-withdraw>
-    <div *ngSwitchDefault>...</div>
-
+    </div>
   </div>
 
 </div>
