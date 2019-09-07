@@ -41552,6 +41552,7 @@ function toMontgomeryR(p) {
 }
 
 function writePoint(h, p) {
+    console.log(p)
     writeBigInt(h, toMontgomeryQ(p[0]));
     writeBigInt(h, toMontgomeryQ(p[1]));
 }
@@ -41604,7 +41605,7 @@ function calculateBuffLen(provingKey) {
 }
 
 
-module.exports = (provingKey) => {
+const build = (provingKey) => {
 
   const buffLen = calculateBuffLen(provingKey);
 
@@ -41614,7 +41615,6 @@ module.exports = (provingKey) => {
       dataView: new DataView(buff),
       offset: 0
   };
-
 
   writeUint32(h, provingKey.nVars);
   writeUint32(h, provingKey.nPublic);
@@ -41626,7 +41626,6 @@ module.exports = (provingKey) => {
   const pPointsB2 = alloc(h, 4);
   const pPointsC = alloc(h, 4);
   const pPointsHExps = alloc(h, 4);
-
   writePoint(h, provingKey.vk_alfa_1);
   writePoint(h, provingKey.vk_beta_1);
   writePoint(h, provingKey.vk_delta_1);
@@ -41671,7 +41670,9 @@ module.exports = (provingKey) => {
   assert.equal(h.offset, buffLen);
 
   return buff;
-}
+};
+
+module.exports = {build};
 },{"assert":102}],85:[function(require,module,exports){
 const assert = require("assert");
 
@@ -41805,7 +41806,7 @@ function pubkey(pk) {
 }
 
 
-_.assign(exports, { randrange, pedersen, witness, fload, verify, pubkey });
+_.assign(exports, { randrange, pedersen, witness, fload, verify, pubkey, proof});
 }).call(this,"/")
 },{"./buildpkey.js":84,"./buildwitness.js":85,"circomlib":15,"circomlib/src/babyjub.js":16,"circomlib/src/pedersenHash.js":20,"crypto":146,"fs":87,"lodash":29,"snarkjs":36,"snarkjs/src/stringifybigint":50,"websnark":68}],87:[function(require,module,exports){
 
