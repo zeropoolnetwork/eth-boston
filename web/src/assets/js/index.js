@@ -4,6 +4,28 @@ function getDepositData(assetId, amount, owner, transactionJSON, proverKey) {
   return snarkUtils.proof(inputs, transactionJSON, proverKey);
 }
 
+function linearize_proof(proof) {
+  const result = Array(8);
+  result[0] = proof.pi_a[0];
+  result[1] = proof.pi_a[1];
+
+  result[2] = proof.pi_b[0][1];
+  result[3] = proof.pi_b[0][0];
+  result[4] = proof.pi_b[1][1];
+  result[5] = proof.pi_b[1][0];
+
+  result[6] = proof.pi_c[0];
+  result[7] = proof.pi_c[1];
+
+  return result;
+}
+
+function prepareDataToPushToSmartContract(data) {
+  const proof = linearize_proof(data.proof);
+  const publicInputs = data.publicSignals;
+  return [...proof, ...publicInputs]
+}
+
 // utxos - all outputs from smart contract events
 // utxoToAsset - two indexes of withdrawal utxos
 function getWithdrawalData(privateKey, proverKey, transactionJSON, /*array*/utxos, /*array*/mp_path, receiver, amount) {
