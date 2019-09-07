@@ -27,11 +27,13 @@ function writeBigInt(h, bi) {
 
 function toMontgomeryQ(p) {
     const q = 21888242871839275222246405745257275088696311157297823662689037894645226208583n;
+    p = BigInt(p);
     return p * (1n << 256n) % q;
 }
 
 function toMontgomeryR(p) {
     const r = 21888242871839275222246405745257275088548364400416034343698204186575808495617n;
+    p = BigInt(p);
     return p * (1n << 256n) % r;
 }
 
