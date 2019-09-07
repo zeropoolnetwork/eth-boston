@@ -1,27 +1,37 @@
-<h3>Your private balance is: 12 pWETH</h3>
-<div>
-  <button class="btn btn-outline btn-lg">DEPOSIT</button>
-  <button class="btn btn-outline btn-lg">TRANSFER</button>
-  <button class="btn btn-outline btn-lg">WITHDRAW</button>
+<div id="body" class="full-screen center wizard-container" style="flex-direction: column;align-items: center">
+
+  <div class="wizard" style="align-items: center; display: flex;flex-direction: column">
+
+    <app-header></app-header>
+
+    <app-address-assets></app-address-assets>
+    <button>APPROVE</button>
+
+    <h3>Your private balance is: 12 pWETH</h3>
+    <div>
+      <button class="btn btn-outline btn-lg"
+              (click)="subState='deposit'">DEPOSIT
+      </button>
+
+      <button class="btn btn-outline btn-lg"
+              (click)="subState='withdraw'">TRANSFER
+      </button>
+
+      <button class="btn btn-outline btn-lg"
+              (click)="subState='transfer'">WITHDRAW
+      </button>
+    </div>
+
+  </div>
+
+  <div [ngSwitch]="subState">
+
+
+    <app-deposit *ngSwitchCase="'deposit'"></app-deposit>
+    <app-transfer *ngSwitchCase="'withdraw'"></app-transfer>
+    <app-withdraw *ngSwitchCase="'transfer'"></app-withdraw>
+    <div *ngSwitchDefault>...</div>
+
+  </div>
+
 </div>
-
-
-<!--<div class="container">-->
-<!--  <div class="row">-->
-<!--    <div class="col-12">-->
-<!--      <div class="card p-3">-->
-<!--        <div class="d-inline-flex justify-content-around">-->
-<!--          <app-head></app-head>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--        <hr class="c0l-8 offset-2" style="border:0.5px solid black">-->
-<!--        </div>-->
-<!--        <app-address-assets></app-address-assets>-->
-<!--        <div class="text-center">-->
-<!--          <app-dashboard></app-dashboard>-->
-<!--        </div>-->
-<!--        <app-deposit></app-deposit>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->

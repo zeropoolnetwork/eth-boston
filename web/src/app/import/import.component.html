@@ -2,18 +2,22 @@
 
   <div class="wizard" style="align-items: center; display: flex;flex-direction: column">
 
-      <app-header></app-header>
+    <app-header></app-header>
 
-      <h2>
-        <b>Setup Anonymous Account on BabyJubJub Elliptic Curve</b>
-      </h2>
+    <h2>
+      <b>Setup Anonymous Account</b>
+    </h2>
 
-      <p>{{mnemonic}}</p>
-      <input style="width: 20em; height: 5em" [(ngModel)]="mnemonic" required/>
+    <h2>
+      <b>on BabyJubJub Elliptic Curve</b>
+    </h2>
 
-      <button (click)='generateWallet()'>Generate Wallet</button>
-      <button (click)='importWallet()'>Import Wallet</button>
-      <button (click)='goToDashboard()'>Next</button>
+    <p>{{mnemonic}}</p>
+    <input style="width: 20em; height: 5em" [(ngModel)]="mnemonic" required/>
+
+    <button (click)='generateWallet()'>Generate Wallet</button>
+    <button (click)='importWallet()'>Import Wallet</button>
+    <button (click)='goToDashboard()'>Next</button>
 
   </div>
 

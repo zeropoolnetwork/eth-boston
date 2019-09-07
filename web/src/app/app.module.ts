@@ -12,6 +12,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { ImportComponent } from './import/import.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HeaderComponent } from "./header/header.component";
+import { WithdrawComponent } from './withdraw/withdraw.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { HeaderComponent } from "./header/header.component";
     DepositComponent,
     WelcomeComponent,
     ImportComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    WithdrawComponent
   ],
   imports: [
     BrowserModule,

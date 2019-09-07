@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  subState: 'deposit' | 'withdraw' | 'transfer' = 'deposit';
+
+  constructor() {
+  }
 
   ngOnInit() {
+    this.subState = 'deposit';
   }
 
 }
