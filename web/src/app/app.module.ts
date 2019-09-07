@@ -10,6 +10,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddressAssetsComponent } from './address-assets/address-assets.component';
 import { TransferComponent } from './transfer/transfer.component';
 import { DepositComponent } from './deposit/deposit.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { ImportComponent } from './import/import.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { DepositComponent } from './deposit/deposit.component';
     DashboardComponent,
     AddressAssetsComponent,
     TransferComponent,
-    DepositComponent
+    DepositComponent,
+    WelcomeComponent,
+    ImportComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
