@@ -1,7 +1,18 @@
-<p>
-  Import works!
-</p>
+<h1>
+  ETH Boston Anonymity Pool!
+</h1>
+<hr>
+
+<h2>
+  <b>Setup Anonymity Account  BabyJubJub Elliptic Curve</b>
+</h2>
+
+<p>{{mnemonic}}</p>
+<input style="width: 20em; height: 5em" [(ngModel)]="mnemonic" required/>
+
+
 
 <button (click)='generateWallet()'>Generate Wallet</button>
+<button (click)='importWallet()'>Import Wallet</button>
 <button (click)='goToDashboard()'>Next</button>
 

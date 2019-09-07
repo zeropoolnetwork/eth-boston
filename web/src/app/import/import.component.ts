@@ -12,11 +12,18 @@ export class ImportComponent implements OnInit {
 
   }
 
+  mnemonic = "";
+
   ngOnInit() {
   }
 
   generateWallet() {
-    // TODO: put jub-jub hd wallet generation here
+    this.mnemonic = (window as any).Bip39.generateMnemonic();
+  }
+
+  importWallet() {
+    const privateKey = (window as any).HDWallet.Privkey(this.mnemonic, "m/44'/0'/0'/0/0");
+    console.log(privateKey);
   }
 
   goToDashboard() {
