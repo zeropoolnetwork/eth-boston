@@ -6,17 +6,20 @@ import (
 	"log"
 	"math/big"
 
-	ethereum "github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"strings"
 )
 
 type SmartContract struct {
 	NetworkID types.EIP155Signer
 	Address   common.Address
 	Client    *ethclient.Client
+	Instance  *Contract
 }
 
 func ConnectContract(endpoint string, contractAddress string) (*SmartContract, error) {
@@ -30,10 +33,16 @@ func ConnectContract(endpoint string, contractAddress string) (*SmartContract, e
 	}
 	address := common.HexToAddress(contractAddress)
 
+	instance, err := NewContract(address, client)
+	if err != nil {
+		return nil, err
+	}
+
 	return &SmartContract{
 		NetworkID: types.NewEIP155Signer(chainID),
 		Address:   address,
 		Client:    client,
+		Instance: instance,
 	}, nil
 }
 
@@ -84,4 +93,12 @@ func (contract *SmartContract) SendSignedTransaction(signedTx *types.Transaction
 		return "", err
 	}
 	return signedTx.Hash().Hex(), nil
+}
+
+func (contract *SmartContract) GetDataByteCode(methodName string, params ...interface{}) ([]byte, error) {
+	airdropAbi, err := abi.JSON(strings.NewReader(ContractABI))
+	if err != nil {
+		return nil, err
+	}
+	return airdropAbi.Pack(methodName, params...)
 }
