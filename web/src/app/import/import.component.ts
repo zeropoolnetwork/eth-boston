@@ -8,11 +8,11 @@ import { Router } from "@angular/router";
 })
 export class ImportComponent implements OnInit {
 
+  mnemonic = "habit this awkward muscle seven omit fiction walnut finger first frown make";
+
   constructor(private router: Router) {
 
   }
-
-  mnemonic = "";
 
   ngOnInit() {
   }
@@ -23,6 +23,7 @@ export class ImportComponent implements OnInit {
 
   importWallet() {
     const privateKey = (window as any).HDWallet.Privkey(this.mnemonic, "m/44'/0'/0'/0/0");
+    // privateKey
     console.log(privateKey);
   }
 
