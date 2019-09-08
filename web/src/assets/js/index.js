@@ -1,6 +1,6 @@
 function getDepositData(assetId, amount, owner, transactionJSON, proverKey, privateKey, publicKey) {
   return new Promise((resolve, reject) => {
-    const u = snark.utxo(assetId, amount, owner, uidRandom());
+    const u = snark.utxo(assetId, amount, snark.pubkey(privateKey), uidRandom());
     const { inputs, add_utxo } = snark.depositCompute({ asset: snark.utxoToAsset(u), owner: u.owner });
     const cyphertext = Crypto.encrypt(add_utxo.map(snark.utxoInputs)[0], privateKey, publicKey);
     snarkUtils.proof(inputs, transactionJSON, proverKey)
@@ -18,12 +18,9 @@ function getWithdrawalData(privateKey, proverKey, transactionJSON, /*array*/utxo
     utxo_in.push(utxo_in[0]);
     mp_path.push(mp_path[0]);
   }
-  // mp_path = [0];
   let res = snark.withdrawalPreCompute({ asset, receiver, utxo_in, mp_sibling, mp_path, root });
-  res.mp_path = res.mp_path.map(x => BigInt(x))
   res = snark.addSignatures(privateKey, res);
   const { inputs } = snark.withdrawalCompute(res);
-  inputs.mp_path = inputs.mp_path.map(x => BigInt(x))
   return snarkUtils.proof(inputs, transactionJSON, proverKey);
 }
 
