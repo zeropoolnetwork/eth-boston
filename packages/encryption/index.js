@@ -27,12 +27,12 @@ function encrypt(message, pubkey) {
 }
 
 function decrypt(message, privkey) {
-  pubkey = babyJub.subgroupDecompress(message[0]);
+  const pubkey = babyJub.subgroupDecompress(message[0]);
   const iv = message[1];
   const edh = babyJub.mulPointEscalar(pubkey, privkey)[0];
   const decrypted_message = message.slice(2).map((e, i) => e - mimc7.hash(edh, iv + BigInt(i)));
   const ivc = mimc7.multiHash(decrypted_message, 0n);
-  return iv != ivc ? decrypted_message : null;
+  return iv == ivc ? decrypted_message : null;
 }
 
 module.exports = { encrypt, decrypt };
