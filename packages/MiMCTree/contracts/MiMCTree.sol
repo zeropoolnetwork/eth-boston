@@ -99,23 +99,73 @@ contract MiMCTree {
   event AddNullifier(uint256 nullifier);
   event AddEcryptedUtxoMessage(bytes data);
 
-
+  mapping (uint256=>bool) nullifier;
 
   //deposit for ethereum
-  function deposit(uint[] memory input, uint[] memory proof, bytes memory data) public payable returns(bool) {
+  function deposit(uint[] memory input, uint[] memory proof, bytes memory encdata1) public payable returns(bool) {
     uint assetId = input[4] & 0xFFFF;
     uint amount = input[4] >> 16;
     require(amount==msg.value);
     require(assetId==0);
-    require(input[5]==(1<<160));
+    require(input[5]==0);
     require(Groth16Verifier.verify(input, proof, vk));
     uint[] memory utxos = new uint[](1);
     utxos[0] = input[3];
     _merklePush(utxos);
     emit AddUtxo(input[3]);
-    emit AddEcryptedUtxoMessage(data);
-    return(true);
+    emit AddEcryptedUtxoMessage(encdata1);
+    return true;
   }
 
+
+  //withdrawal for ethereum
+  function withdrawal(uint[] memory input, uint[] memory proof, bytes memory encdata1, bytes memory encdata2) public returns(bool) {
+    uint assetId = input[4] & 0xFFFF;
+    uint amount = input[4] >> 16;
+    address payable target = address(uint160(input[5]));
+    require((nullifier[input[1]] || nullifier[input[2]]) == false);
+    require(merkleRoot()==input[0]);
+    require(assetId==0);
+    require((input[5] >> 160) == 1);
+    require(Groth16Verifier.verify(input, proof, vk));
+    uint[] memory utxos = new uint[](1);
+    utxos[0] = input[3];
+    _merklePush(utxos);
+    emit AddUtxo(input[3]);
+    emit AddUtxo(input[4]);
+    emit AddEcryptedUtxoMessage(encdata1);
+    emit AddEcryptedUtxoMessage(encdata2);
+    nullifier[input[1]] = true;
+    nullifier[input[2]] = true;
+    target.transfer(amount);
+    return true;
+  }
+
+/*
+  signal input root;
+  signal input n1;
+  signal input n2_or_u_in;
+  signal input out_u1;
+  signal input out_u2_or_asset;
+  signal input txtype;
+*/
+  //transfer for ethereum
+  function transfer(uint[] memory input, uint[] memory proof, bytes memory encdata1, bytes memory encdata2) public returns(bool) {
+    require((nullifier[input[1]] || nullifier[input[2]]) == false);
+    require(merkleRoot()==input[0]);
+    require((input[5] >> 160) == 2);
+    require(Groth16Verifier.verify(input, proof, vk));
+    uint[] memory utxos = new uint[](2);
+    utxos[0] = input[3];
+    utxos[1] = input[4];
+    _merklePush(utxos);
+    emit AddUtxo(input[3]);
+    emit AddUtxo(input[4]);
+    emit AddEcryptedUtxoMessage(encdata1);
+    emit AddEcryptedUtxoMessage(encdata2);
+    nullifier[input[1]] = true;
+    nullifier[input[2]] = true;
+    return true;
+  }
 
 }
