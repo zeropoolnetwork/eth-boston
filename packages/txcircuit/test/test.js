@@ -171,25 +171,25 @@ function transfer2Test3() {
 
 
 describe("Deposit", function () {
-  this.timeout(20000);
+  this.timeout(80000);
   it("Should prove deposit", depositTest)
 })
 
 describe("Withdrawal", function () {
-  this.timeout(20000);
+  this.timeout(80000);
   it("Should withdraw for 2 inputs", withdrawalTest);
   it("Should withdraw for 1 input", withdrawalTest2);
 })
 
 describe("Transfer", function () {
-  this.timeout(20000);
+  this.timeout(80000);
   it("Should transfer for 2 same asset type inputs", transferTest);
   it("Should transfer for 2 different asset inputs", transferTest2);
   it("Should transfer for 1 input", transferTest3);
 })
 
 describe("Partial transfer", function () {
-  this.timeout(20000);
+  this.timeout(80000);
   it("Should process partial transfer for 2 same asset type inputs", transfer2Test);
   it("Should process partial transfer for 2 different asset inputs", transfer2Test2);
   it("Should process partial transfer for 1 input", transfer2Test3);
