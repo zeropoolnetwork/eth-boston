@@ -132,6 +132,5 @@ Thanks to Oleg Taraskin and Kobi Gurkan for links.
 
 # Deployed contract
 
-
-https://kovan.etherscan.io/address/0xda033297df0224e0404654638792c3ead018d788#code
+https://kovan.etherscan.io/address/0xd4b615113347ec15d51bcf8f862b4cea7bf47b8f#code
 
