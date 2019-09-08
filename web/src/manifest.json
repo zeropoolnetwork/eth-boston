@@ -14,5 +14,5 @@
     "storage",
     "tabs"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src 'sha256-IhWlkHlG78tGgZKmZflvkO0kQoJWmET8EDc6YpMENy0='"
 }
