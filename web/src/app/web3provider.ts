@@ -87,9 +87,11 @@ export class Web3Provider {
   }
 
   public sendSmartContract(methodName: string, parameters: any[] = [], value: string = '') {
+    debugger
     return new Promise((resolve, reject) => {
       this.contractInstance[methodName](...parameters, {value}, (err, res) => {
         if (err) {
+          debugger
           reject(err);
         }
         resolve(res);
@@ -105,6 +107,7 @@ export class Web3Provider {
   }
 
   public deposit(input: any[], proof: any[], encdata1: any[], value: string) {
+
     return this.sendSmartContract("deposit", [input, proof, encdata1], value)
   }
 
@@ -116,25 +119,25 @@ export class Web3Provider {
     return this.sendSmartContract("transfer", [input, proof, encdata1, encdata2], value)
   }
 
-  public getAllAddUtxoEvents() {
-    return new Promise((resolve, reject) => {
-      this.contractInstance.AddUtxo((res, err) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    });
-  }
-
-  public getAllAddEcryptedUtxoMessage() {
-    return new Promise((resolve, reject) => {
-      this.contractInstance.AddEcryptedUtxoMessage((res, err) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(res);
-      });
-    });
-  }
+  // public getAllAddUtxoEvents() {
+  //   return new Promise((resolve, reject) => {
+  //     this.contractInstance.AddUtxo((res, err) => {
+  //       if (err) {
+  //         reject(err);
+  //       }
+  //       resolve(res);
+  //     });
+  //   });
+  // }
+  //
+  // public getAllAddEcryptedUtxoMessage() {
+  //   return new Promise((resolve, reject) => {
+  //     this.contractInstance.AddEcryptedUtxoMessage((res, err) => {
+  //       if (err) {
+  //         reject(err);
+  //       }
+  //       resolve(res);
+  //     });
+  //   });
+  // }
 }

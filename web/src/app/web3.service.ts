@@ -12,6 +12,6 @@ export class Web3Service {
   kovan: Web3Provider;
 
   constructor() {
-    this.kovan = new Web3Provider(kovanAddress, abi);
+    this.kovan = new Web3Provider(abi, kovanAddress);
   }
 }
