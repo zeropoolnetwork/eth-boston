@@ -2,15 +2,15 @@
 
   <div class="pb-2">
   <h4>Your anonymous address:</h4>
-  <ng-select [items]="addresses"
+  <ng-select [items]="accountAddressesList"
              [(ngModel)]="selectedAddress" [clearable]=false [searchable]=false>
   </ng-select>
   </div>
 
   <div class="pt-2 pb-4">
   <h4>Select Asset:</h4>
-  <ng-select [items]="addresses"
-             [(ngModel)]="selectedAddress" [clearable]=false [searchable]=false>
+  <ng-select [items]="assetAddressesList"
+             [(ngModel)]="selectedAsset" [clearable]=false [searchable]=false>
   </ng-select>
   </div>
 

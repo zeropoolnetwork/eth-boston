@@ -1,26 +1,37 @@
 import { Injectable } from '@angular/core';
 
+const defaultPath = "m/44'/0'/0'/0/0";
+
 @Injectable({
   providedIn: 'root'
 })
 export class WalletService {
 
-  private mnemonic: string;
+  // private mnemonic: string;
+  private _mnemonic: string;
+  get mnemonic(): string {
+    return localStorage.getItem('mnemonic');
+  }
+
+  set mnemonic(value: string) {
+    localStorage.setItem('mnemonic', value);
+  }
 
   constructor() {
   }
 
-  setMnemonic(mnemonic: string) {
-    this.mnemonic = mnemonic;
+  getPrivateKey(path: string = defaultPath): any {
+    return (window as any).HDWallet.Privkey(this.mnemonic, defaultPath);
   }
 
-  getPrivateKey(): any {
-    return (window as any).HDWallet.Privkey(this.mnemonic, "m/44'/0'/0'/0/0");
+  getPublicKey(path: string = defaultPath): any {
+    const publicKey = (window as any).HDWallet.Pubkey(this.mnemonic, defaultPath);
+    return publicKey.K[0];
   }
 
-  getPublicKey(): any {
-    const publicKey = (window as any).HDWallet.Pubkey(this.mnemonic, "m/44'/0'/0'/0/0");
-    return 'zp:' + publicKey.K[0].toString();
+  getAddress(): any {
+    const x = `zp:${this.getPublicKey()}`;
+    return `zp:${this.getPublicKey()}`;
   }
 
 }

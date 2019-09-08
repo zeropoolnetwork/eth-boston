@@ -11,12 +11,36 @@ export class DashboardComponent implements OnInit {
   subState: 'deposit' | 'withdraw' | 'transfer' | '' = '';
   isApproved = false;
 
+  accountAddresses: any = [
+    // {value: 1, label: '0x0000000000000000001'}
+  ];
+
+  assetAddresses: any = [
+    // {value: 1, label: '0x0000000000000000002'}
+  ];
+
   constructor(private wallet: WalletService) {
   }
 
   ngOnInit() {
     const publicKey = this.wallet.getPublicKey();
-    console.log(publicKey);
+    this.accountAddresses = [
+      {
+        value: this.wallet.getPublicKey(),
+        label: this.wallet.getAddress()
+      },
+    ];
+
+    this.assetAddresses = [
+      {
+        value: 'ETH',
+        label: 'ETH'
+      },
+      {
+        value: 'ETH', // TODO: put token address  corresponding here
+        label: 'WETH'
+      },
+    ];
   }
 
   approveAsset() {

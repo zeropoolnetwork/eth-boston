@@ -19,9 +19,7 @@ export class ImportComponent {
   // }
 
   importWallet() {
-    // const publicKey = (window as any).HDWallet.Pubkey(this.mnemonic, "m/44'/0'/0'/0/0");
-    // const x = 'zp:' + publicKey.K[0].toString();
-    this.wallet.setMnemonic(this.mnemonic);
+    this.wallet.mnemonic = this.mnemonic;
     this.router.navigate(['/dashboard']);
   }
 
