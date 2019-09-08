@@ -8,6 +8,17 @@ Video:
 - https://youtu.be/fU8WTTzrRYA
 - https://youtu.be/FE37_hiV4kQ
 
+
+### Deployed contracts
+
+https://kovan.etherscan.io/address/0xd4b615113347ec15d51bcf8f862b4cea7bf47b8f
+
+SKALE endpoint https://ethboston0.skalenodes.com:10216 contract 0x06f89a58BBC9Ed8fcCc7735adE681Ec211eCf004
+
+https://rinkeby.etherscan.io/address/0x62f914ce7263867048997cc748d4646d45631695#code
+
+https://scan.thundercore.com/address/0x4aF990fB619F3bD7E9AF1CaaADd04042B696a946
+
 ## Cryptography primitives 
 
 ### Fast elliptic point compression for the subgroup
@@ -128,13 +139,4 @@ Merkle proofs are used to prove that we are spending one asset from the set of a
 1. [Maciej Ulas "Rational points on certain hyperelliptic curves over finite fields"](https://arxiv.org/pdf/0706.1448.pdf)
 
 Thanks to Oleg Taraskin and Kobi Gurkan for links.
-
-
-# Deployed contract
-
-SKALE endpoint https://ethboston0.skalenodes.com:10216 contract 0x06f89a58BBC9Ed8fcCc7735adE681Ec211eCf004
-
-https://rinkeby.etherscan.io/address/0x62f914ce7263867048997cc748d4646d45631695#code
-
-https://kovan.etherscan.io/address/0xd4b615113347ec15d51bcf8f862b4cea7bf47b8f#code
 
