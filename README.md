@@ -1,4 +1,4 @@
-# ETH Denver AnonymotyPool
+# AnonymotyPool
 
 ## Preparing to generate the UTXO 
 1. A pair of keys is generated on the custom curve (next `PubKey` and `PvtKey`) 
