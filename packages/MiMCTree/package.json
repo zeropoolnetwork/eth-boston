@@ -22,8 +22,9 @@
     "groth16batchverifier": "github:snjax/groth16batchverifier#master",
     "openzeppelin-solidity": "^2.3.0",
     "snarkjs": "^0.1.18",
+    "truffle": "^5.0.35",
     "truffle-artifactor": "^4.0.30",
-    "truffle-hdwallet-provider": "1.0.5",
+    "truffle-hdwallet-provider": "^1.0.5",
     "web3": "1.0.0-beta.37"
   }
 }
