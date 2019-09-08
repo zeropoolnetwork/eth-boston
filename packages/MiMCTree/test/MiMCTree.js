@@ -1,9 +1,5 @@
-
 const MiMCTree = artifacts.require('MiMCTree');
 const MiMC = artifacts.require('MiMC');
-
-
-
 
 
 contract('MiMC hash test', (accounts) => {

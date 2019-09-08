@@ -1,7 +1,11 @@
 <div class="d-flex flex-column m-5 p-5" style="align-items: center; justify-content: center">
   <div class="d-flex flex-column" style="align-items: center;width:350px">
     <app-header></app-header>
-    <app-address-assets class="w-100"></app-address-assets>
+    <app-address-assets class="w-100"
+                        [accountAddressesList]="accountAddresses"
+                        [assetAddressesList]="assetAddresses">
+    </app-address-assets>
+
     <button class="btn btn-outline btn-lg" (click)="approveAsset()">APPROVE</button>
   </div>
 
