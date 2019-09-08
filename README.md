@@ -4,6 +4,10 @@ Description of cryptographic primitives, used here - https://ethresear.ch/t/some
 
 *Disclaimer: This is a very experimental project, and the components described here is strongly unrecommended to use in production without further research.*
 
+Video:
+- https://youtu.be/fU8WTTzrRYA
+- https://youtu.be/FE37_hiV4kQ
+
 ## Cryptography primitives 
 
 ### Fast elliptic point compression for the subgroup
