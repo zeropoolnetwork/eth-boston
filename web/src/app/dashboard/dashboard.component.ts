@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WalletService } from "../wallet.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -10,10 +11,11 @@ export class DashboardComponent implements OnInit {
   subState: 'deposit' | 'withdraw' | 'transfer' | '' = '';
   isApproved = false;
 
-  constructor() {
+  constructor(private wallet: WalletService) {
   }
 
   ngOnInit() {
+    this.wallet.getPublicKey()
   }
 
   approveAsset() {
