@@ -132,6 +132,8 @@ Thanks to Oleg Taraskin and Kobi Gurkan for links.
 
 # Deployed contract
 
+SKALE endpoint https://ethboston0.skalenodes.com:10216 contract 0x06f89a58BBC9Ed8fcCc7735adE681Ec211eCf004
+
 https://rinkeby.etherscan.io/address/0x62f914ce7263867048997cc748d4646d45631695#code
 
 https://kovan.etherscan.io/address/0xd4b615113347ec15d51bcf8f862b4cea7bf47b8f#code
