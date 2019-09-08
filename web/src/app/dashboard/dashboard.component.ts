@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WalletService } from "../wallet.service";
+import { Web3Service } from "../web3.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -21,8 +22,9 @@ export class DashboardComponent implements OnInit {
   assetAddresses: any = [
     // {value: 1, label: '0x0000000000000000002'}
   ];
+  balance: any = 0;
 
-  constructor(private wallet: WalletService) {
+  constructor(private wallet: WalletService, private web3: Web3Service) {
   }
 
   ngOnInit() {
@@ -42,6 +44,14 @@ export class DashboardComponent implements OnInit {
       // },
     ];
 
+    // const pubKey = this.publicKey;
+    // const w = window as any;
+    // setInterval(() => {
+    //   const wei = this.web3.kovan.getBalance(pubKey).then( () => {
+    //     this.balance = this.web3.kovan.fw(wei);
+    //     console.log('balance=', this.web3.kovan.fw(wei));
+    //   });
+    // }, 10000);
 
     // WETH addresses
     //

@@ -16,9 +16,8 @@
 
   <div class="row">
 
-
     <div class="col-12 pt-4" *ngIf="assetId === 'ETH' || isApproved">
-      <h3 align="center">Your private balance is: 12 pWETH</h3>
+      <h3 align="center">Your private balance is: {{balance}} ETH</h3>
       <div class="text-center">
         <button class="btn btn-outline btn-lg"
                 [ngClass]="{'active': subState==='deposit'}"
