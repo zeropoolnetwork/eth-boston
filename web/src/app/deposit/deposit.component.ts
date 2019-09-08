@@ -14,6 +14,7 @@ export class DepositComponent implements OnInit {
   }
 
   ngOnInit() {
+    //
   }
 
   deposit() {
