@@ -11,7 +11,9 @@
   "dependencies": {
     "circomlib": "github:snjax/circomlib#master",
     "lodash": "^4.17.15",
-    "wasmbuilder": "0.0.8",
-    "websnark": "0.0.4"
+    "wasmbuilder": "0.0.3",
+    "websnark": "0.0.4",
+    "snarkjs": "0.1.14",
+    "big-integer": "1.6.42"
   }
 }
