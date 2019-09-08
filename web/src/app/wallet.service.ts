@@ -6,9 +6,6 @@ const defaultPath = "m/44'/0'/0'/0/0";
   providedIn: 'root'
 })
 export class WalletService {
-
-  // private mnemonic: string;
-  private _mnemonic: string;
   get mnemonic(): string {
     return localStorage.getItem('mnemonic');
   }
