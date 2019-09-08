@@ -56,6 +56,11 @@ module.exports = {
       network_id: 42,
       skipDryRun: true
     },
+    mainnet: {
+      provider: new HDWalletProvider("e6d304fa1be77229d017b21156265f910a2f4db98a09c39d3f2f18d75639fd5e", "https://mainnet.infura.io/v3/c7463beadf2144e68646ff049917b716"),
+      network_id: 1,
+      skipDryRun: true
+    },
     // sokol: {
     //   provider: new HDWalletProvider(process.env.PRIVATE_KEY, "https://sokol.poa.network/"),
     //   network_id: "*", // Match any network id

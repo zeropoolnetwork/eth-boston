@@ -7,6 +7,7 @@ export class Web3Provider {
     const eth = (window as any).web3.eth;
     const prepare = eth.contract(contractAbi);
     this.contractInstance = prepare.at(contractAddress);
+    console.log(this.contractInstance.address);
     this.web3 = (window as any).web3;
   }
 
@@ -90,11 +91,9 @@ export class Web3Provider {
   }
 
   public sendSmartContract(methodName: string, parameters: any[] = [], value: string = '') {
-    debugger
     return new Promise((resolve, reject) => {
       this.contractInstance[methodName](...parameters, {value}, (err, res) => {
         if (err) {
-          debugger
           reject(err);
         }
         resolve(res);
@@ -110,8 +109,8 @@ export class Web3Provider {
   }
 
   public deposit(input: any[], proof: any[], encdata1: any[], value: string) {
-
-    return this.sendSmartContract("deposit", [input, proof, encdata1], value)
+    // debugger
+    return this.sendSmartContract("deposit", [input, proof, encdata1], value);
   }
 
   public withdrawal(input: any[], proof: any[], encdata1: any[], encdata2: any[], value: string) {
