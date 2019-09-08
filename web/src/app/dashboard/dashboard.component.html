@@ -3,15 +3,21 @@
     <app-header></app-header>
     <app-address-assets class="w-100"
                         [accountAddressesList]="accountAddresses"
-                        [assetAddressesList]="assetAddresses">
+                        [assetAddressesList]="assetAddresses"
+                        (publicKeyChanged)="updatePublicKey($event)"
+                        (assetIdChanged)="updateAssetId($event)">
     </app-address-assets>
 
-    <button class="btn btn-outline btn-lg" (click)="approveAsset()">APPROVE</button>
+    <div *ngIf="assetId !== 'ETH'">
+      <button class="btn btn-outline btn-lg" (click)="approveAsset()">APPROVE</button>
+    </div>
+
   </div>
 
   <div class="row">
 
-    <div class="col-12 pt-4" *ngIf="isApproved">
+
+    <div class="col-12 pt-4" *ngIf="assetId === 'ETH' || isApproved">
       <h3 align="center">Your private balance is: 12 pWETH</h3>
       <div class="text-center">
         <button class="btn btn-outline btn-lg"

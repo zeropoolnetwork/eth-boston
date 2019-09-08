@@ -21,17 +21,16 @@ export class WalletService {
   }
 
   getPrivateKey(path: string = defaultPath): any {
-    return (window as any).HDWallet.Privkey(this.mnemonic, defaultPath);
+    return (window as any).HDWallet.Privkey(this.mnemonic, path);
   }
 
   getPublicKey(path: string = defaultPath): any {
-    const publicKey = (window as any).HDWallet.Pubkey(this.mnemonic, defaultPath);
+    const publicKey = (window as any).HDWallet.Pubkey(this.mnemonic, path);
     return publicKey.K[0];
   }
 
-  getAddress(): any {
-    const x = `zp:${this.getPublicKey()}`;
-    return `zp:${this.getPublicKey()}`;
+  getAddress(path: string = defaultPath): any {
+    return `zp:${this.getPublicKey(path)}`;
   }
 
 }

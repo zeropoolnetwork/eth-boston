@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-address-assets',
@@ -13,8 +13,14 @@ export class AddressAssetsComponent implements OnChanges {
   @Input()
   assetAddressesList: Array<any> = [];
 
-  selectedAddress = null;
-  selectedAsset = null;
+  @Output()
+  publicKeyChanged = new EventEmitter<string>();
+
+  @Output()
+  assetIdChanged = new EventEmitter<string>();
+
+  selectedAddress: any = null;
+  selectedAsset: any = null;
 
   constructor() {
 
@@ -30,5 +36,11 @@ export class AddressAssetsComponent implements OnChanges {
     }
   }
 
+  accountChanged($event: any) {
+    this.publicKeyChanged.emit($event.value);
+  }
 
+  assetChanged($event: any) {
+    this.assetIdChanged.emit($event.value);
+  }
 }
