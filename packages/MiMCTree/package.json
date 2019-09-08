@@ -19,6 +19,8 @@
   "dependencies": {
     "circom": "0.0.31",
     "dotenv": "^6.2.0",
+    "groth16batchverifier": "github:snjax/groth16batchverifier#master",
+    "openzeppelin-solidity": "^2.3.0",
     "snarkjs": "^0.1.18",
     "truffle-artifactor": "^4.0.30",
     "truffle-hdwallet-provider": "1.0.5",

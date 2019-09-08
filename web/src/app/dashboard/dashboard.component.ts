@@ -15,7 +15,8 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.wallet.getPublicKey()
+    const publicKey = this.wallet.getPublicKey();
+    console.log(publicKey);
   }
 
   approveAsset() {
