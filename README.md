@@ -1,4 +1,6 @@
-# AnonymotyPool
+# Anonymous Pool
+
+Description of cryptographic primitives, used here - https://ethresear.ch/t/some-snarky-tricks-from-ethboston-zeropool-under-the-hood/6115
 
 ## Preparing to generate the UTXO 
 1. A pair of keys is generated on the custom curve (next `PubKey` and `PvtKey`) 
