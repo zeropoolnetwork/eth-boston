@@ -129,3 +129,9 @@ Merkle proofs are used to prove that we are spending one asset from the set of a
 
 Thanks to Oleg Taraskin and Kobi Gurkan for links.
 
+
+# Deployed contract
+
+
+https://kovan.etherscan.io/address/0xda033297df0224e0404654638792c3ead018d788#code
+
