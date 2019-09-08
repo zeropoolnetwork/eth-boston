@@ -1,10 +1,16 @@
 <div class="box col-8 offset-2 mt-4">
-  <div class="form-group">
+
+  <div class="form-group" *ngIf="!showLoader">
     <label for="amount">Amount</label>
-    <input type="number" class="form-control" #amount id="amount" aria-describedby="amount" placeholder="Enter amount">
-<!--<small *ngIf="amount.value <= 0" id="amountHelp" class="form-text text-muted">Error must be more 0</small>-->
+    <input type="number" class="form-control" id="amount"
+           [(ngModel)]="ethAmount" aria-describedby="amount" placeholder="Enter amount in ETH">
+    <!--<small *ngIf="amount.value <= 0" id="amountHelp" class="form-text text-muted">Error must be more 0</small>-->
   </div>
+
+  <div *ngIf="showLoader" class="loader">Loading...</div>
+
   <div class="text-center">
-    <button class=" btn btn-outline-second btn-lg" (click)="deposit()">DEPOSIT</button>
+    <button class=" btn btn-outline-second btn-lg" (click)="deposit()" *ngIf="!showLoader">DEPOSIT</button>
   </div>
+
 </div>
