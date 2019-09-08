@@ -26,21 +26,21 @@
         </button>
 
         <button class="btn btn-outline btn-lg"
-                [ngClass]="{'active': subState==='withdraw'}"
-                (c1ick)="subState='withdraw'">TRANSFER
+                [ngClass]="{'active': subState==='transfer'}"
+                (click)="subState='transfer'">TRANSFER
         </button>
 
         <button class="btn btn-outline btn-lg"
-                [ngClass]="{'active': subState==='transfer'}"
-                (click)="subState='transfer'">WITHDRAW
+                [ngClass]="{'active': subState==='withdraw'}"
+                (click)="subState='withdraw'">WITHDRAW
         </button>
       </div>
 
       <div [ngSwitch]="subState">
 
         <app-deposit *ngSwitchCase="'deposit'"></app-deposit>
-        <app-transfer *ngSwitchCase="'withdraw'"></app-transfer>
-        <app-withdraw *ngSwitchCase="'transfer'"></app-withdraw>
+        <app-transfer *ngSwitchCase="'transfer'"></app-transfer>
+        <app-withdraw *ngSwitchCase="'withdraw'"></app-withdraw>
         <div *ngSwitchDefault></div>
 
       </div>

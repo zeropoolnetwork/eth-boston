@@ -1,4 +1,4 @@
-const { randrange, witness, pedersen, pubkey } = require("../src/utils.js");
+const { randrange, witness, pedersen, pubkey, proof, verify } = require("../src/utils.js");
 const babyJub = require("circomlib/src/babyjub.js");
 
 const _ = require("lodash");
@@ -15,6 +15,14 @@ function depositTest() {
   const u = utxoRandom();
   const { inputs } = depositCompute({ asset: utxoToAsset(u), owner: u.owner });
   const w = witness(inputs, "transaction");
+}
+
+async function depositTest_Proof_and_verify() {
+  const u = utxoRandom();
+  const { inputs } = depositCompute({ asset: utxoToAsset(u), owner: u.owner });
+  const pi = await proof(inputs, "transaction");
+  console.log(verify(pi, "transaction"));
+
 }
 
 function genRandomState(fixed) {
@@ -173,6 +181,7 @@ function transfer2Test3() {
 describe("Deposit", function () {
   this.timeout(80000);
   it("Should prove deposit", depositTest)
+  it("Should prove and verify deposit", depositTest_Proof_and_verify);
 })
 
 describe("Withdrawal", function () {
@@ -195,3 +204,7 @@ describe("Partial transfer", function () {
   it("Should process partial transfer for 1 input", transfer2Test3);
 })
 
+// (async () => {
+//   await depositTest_Proof_and_verify()
+//   process.exit();
+// })();

@@ -17,7 +17,7 @@ contract MiMCTree {
 
   uint256 constant proofLength = 30;
   uint256 constant height = proofLength+1;
-  uint256[] vk = [ 
+  uint256[] vk = [
     16998550835308717596021269693023145348120940320458380850783345104936803943714,
     19043499103541205113220604030308080901976563967840098287208365622667556166068,
     7272313765343817734167737917776736120505349704739893741698895290157800499590,
@@ -101,21 +101,26 @@ contract MiMCTree {
 
   mapping (uint256=>bool) nullifier;
 
-  //deposit for ethereum
-  function deposit(uint[] memory input, uint[] memory proof, bytes memory encdata1) public payable returns(bool) {
-    uint assetId = input[4] & 0xFFFF;
-    uint amount = input[4] >> 16;
-    require(amount==msg.value);
-    require(assetId==0);
-    require(input[5]==0);
-    require(Groth16Verifier.verify(input, proof, vk));
-    uint[] memory utxos = new uint[](1);
-    utxos[0] = input[3];
-    _merklePush(utxos);
-    emit AddUtxo(input[3]);
-    emit AddEcryptedUtxoMessage(encdata1);
-    return true;
-  }
+    // deposit for ethereum
+    function deposit(uint[] memory input, uint[] memory proof, bytes memory encdata1) public payable returns(bool) {
+
+      uint assetId = input[4] & 0xFFFF;
+      uint amount = input[4] >> 16;
+
+      require(amount==msg.value, "1");
+      require(assetId==0, "2");
+      require(input[5]==0, "3");
+      require(Groth16Verifier.verify(input, proof, vk), "4");
+
+      uint[] memory utxos = new uint[](1);
+      utxos[0] = input[3];
+
+      _merklePush(utxos);
+
+      emit AddUtxo(input[3]);
+      emit AddEcryptedUtxoMessage(encdata1);
+      return true;
+    }
 
 
   //withdrawal for ethereum

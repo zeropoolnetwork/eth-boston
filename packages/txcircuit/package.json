@@ -11,7 +11,11 @@
   "dependencies": {
     "circomlib": "github:snjax/circomlib#master",
     "lodash": "^4.17.15",
-    "wasmbuilder": "0.0.8",
+    "truffle-hdwallet-provider": "1.0.5",
+    "snarkjs": "0.1.14",
+    "wasmbuilder": "0.0.3",
+    "web3": "1.0.0-beta.37",
+    "big-integer": "1.6.42",
     "websnark": "0.0.4"
   }
 }
