@@ -1,6 +1,9 @@
 export class Web3Provider {
 
   constructor(contractAbi: any, contractAddress: any) {
+    // Unlock metamask
+    (window as any).ethereum.enable();
+
     const eth = (window as any).web3.eth;
     const prepare = eth.contract(contractAbi);
     this.contractInstance = prepare.at(contractAddress);
