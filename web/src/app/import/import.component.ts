@@ -1,33 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
+import { WalletService } from "../wallet.service";
 
 @Component({
   selector: 'app-import',
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.css']
 })
-export class ImportComponent implements OnInit {
+export class ImportComponent {
 
   mnemonic = "habit this awkward muscle seven omit fiction walnut finger first frown make";
 
-  constructor(private router: Router) {
-
+  constructor(private router: Router, private wallet: WalletService) {
   }
 
-  ngOnInit() {
-  }
-
-  generateWallet() {
-    this.mnemonic = (window as any).Bip39.generateMnemonic();
-  }
+  // generateWallet() {
+  //   this.mnemonic = (window as any).Bip39.generateMnemonic();
+  // }
 
   importWallet() {
-    const privateKey = (window as any).HDWallet.Privkey(this.mnemonic, "m/44'/0'/0'/0/0");
-    // privateKey
-    console.log(privateKey);
-  }
-
-  goToDashboard() {
+    this.wallet.mnemonic = this.mnemonic;
     this.router.navigate(['/dashboard']);
   }
+
+  // goToDashboard() {
+  //   this.router.navigate(['/dashboard']);
+  // }
 }

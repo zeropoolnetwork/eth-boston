@@ -1,13 +1,23 @@
 <div class="d-flex flex-column m-5 p-5" style="align-items: center; justify-content: center">
   <div class="d-flex flex-column" style="align-items: center;width:350px">
     <app-header></app-header>
-    <app-address-assets class="w-100"></app-address-assets>
-    <button class="btn btn-outline btn-lg" (click)="approveAsset()">APPROVE</button>
+    <app-address-assets class="w-100"
+                        [accountAddressesList]="accountAddresses"
+                        [assetAddressesList]="assetAddresses"
+                        (publicKeyChanged)="updatePublicKey($event)"
+                        (assetIdChanged)="updateAssetId($event)">
+    </app-address-assets>
+
+    <div *ngIf="assetId !== 'ETH'">
+      <button class="btn btn-outline btn-lg" (click)="approveAsset()">APPROVE</button>
+    </div>
+
   </div>
 
   <div class="row">
 
-    <div class="col-12 pt-4" *ngIf="isApproved">
+
+    <div class="col-12 pt-4" *ngIf="assetId === 'ETH' || isApproved">
       <h3 align="center">Your private balance is: 12 pWETH</h3>
       <div class="text-center">
         <button class="btn btn-outline btn-lg"
@@ -17,7 +27,7 @@
 
         <button class="btn btn-outline btn-lg"
                 [ngClass]="{'active': subState==='withdraw'}"
-                (click)="subState='withdraw'">TRANSFER
+                (c1ick)="subState='withdraw'">TRANSFER
         </button>
 
         <button class="btn btn-outline btn-lg"

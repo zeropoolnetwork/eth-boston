@@ -1,7 +1,13 @@
-function getDepositData(assetId, amount, owner, transactionJSON, proverKey) {
-  const u = snark.utxo(assetId, amount, owner, uidRandom());
-  const { inputs } = snark.depositCompute({ asset: snark.utxoToAsset(u), owner: u.owner });
-  return snarkUtils.proof(inputs, transactionJSON, proverKey);
+function getDepositData(assetId, amount, owner, transactionJSON, proverKey, privateKey, publicKey) {
+  return new Promise((resolve, reject) => {
+    const u = snark.utxo(assetId, amount, owner, uidRandom());
+    const { inputs, add_utxo } = snark.depositCompute({ asset: snark.utxoToAsset(u), owner: u.owner });
+    const cyphertext = Crypto.encrypt(add_utxo.map(snark.utxoInputs)[0], privateKey, publicKey);
+    snarkUtils.proof(inputs, transactionJSON, proverKey)
+      .then(sn => {
+        resolve({snark: sn, cyphertext: cyphertext})
+      })
+  });
 }
 
 function linearize_proof(proof) {
@@ -21,10 +27,28 @@ function linearize_proof(proof) {
 }
 
 function prepareDataToPushToSmartContract(data) {
-  const proof = linearize_proof(data.proof);
-  const publicInputs = data.publicSignals;
-  return [...proof, ...publicInputs]
+  const proof = linearize_proof(data.snark.proof);
+  const publicInputs = data.snark.publicSignals;
+  const cyphertext = bigIntArrayToHex(data.cyphertext);
+  return [[...publicInputs], [...proof], "0x" + cyphertext]
 }
+
+function bigIntArrayToHex(data) {
+  const arrayOfBuffers = appendBuffer(data.map(x => BigInt.leInt2Buff(x, 32)));
+  return toHexString(arrayOfBuffers);
+}
+
+function appendBuffer(buffers) {
+  const bytesCount = buffers.map(x => x.byteLength).reduce((x, acc) => acc += x);
+  const tmp = new Uint8Array(bytesCount);
+  for (let i = 0; i < buffers.length; i++) {
+    tmp.set(new Uint8Array(buffers[i]), 32 * i);
+  }
+  return tmp;
+}
+
+const toHexString = bytes =>
+  bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
 // utxos - all outputs from smart contract events
 // utxoToAsset - two indexes of withdrawal utxos
