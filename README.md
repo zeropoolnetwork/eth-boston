@@ -1,4 +1,4 @@
-# AnonymotyPool
+# Anonymous Pool
 
 Description of cryptographic primitives, used here - https://ethresear.ch/t/some-snarky-tricks-from-ethboston-zeropool-under-the-hood/6115
 
