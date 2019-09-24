@@ -12,7 +12,7 @@ export class WithdrawComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.withdrawal()
+    this.withdrawal();
   }
 
   withdrawal() {
@@ -27,13 +27,14 @@ export class WithdrawComponent implements OnInit {
     console.log(`Private key: ${pvk.k}`);
     console.log(`Public key: ${pbk}`);
 
-    let encryptedUtxo = w.hexToBigInt("27fc96c235b9409c23c6664282549eb5bfe14a9a56d61d54af1479c07390241642ffafaf6c283c4c8c8ea71665ba7d7c3ab32ebf04f933f52af1850e432c2d28b8773e4c34595013e4b6d0601b8fa19e00f8e3c85e5df564a3e9b5817edcee0caa2b2b6bd41ed115d6344b09ac7b22f7c4b16b0fa76856b565b8bbdabd223e205fbadcf58cead6246242ffe857d549681981ee67b640ffd1bacfc3ec78fc8d34");
+    // tslint:disable-next-line:max-line-length
+    const encryptedUtxo = w.hexToBigInt("27fc96c235b9409c23c6664282549eb5bfe14a9a56d61d54af1479c07390241642ffafaf6c283c4c8c8ea71665ba7d7c3ab32ebf04f933f52af1850e432c2d28b8773e4c34595013e4b6d0601b8fa19e00f8e3c85e5df564a3e9b5817edcee0caa2b2b6bd41ed115d6344b09ac7b22f7c4b16b0fa76856b565b8bbdabd223e205fbadcf58cead6246242ffe857d549681981ee67b640ffd1bacfc3ec78fc8d34");
     console.log(`Encrypted utxo: ${encryptedUtxo}`);
 
-    let decryptedUtxo = w.Crypto.decrypt(encryptedUtxo, pbk, pvk.k);
+    const decryptedUtxo = w.Crypto.decrypt(encryptedUtxo, pbk, pvk.k);
     console.log("Decrypted utxo", decryptedUtxo);
 
-    let readableUtxo = w.snark.utxo(decryptedUtxo[0], decryptedUtxo[1], decryptedUtxo[2], decryptedUtxo[3]);
+    const readableUtxo = w.snark.utxo(decryptedUtxo[0], decryptedUtxo[1], decryptedUtxo[2], decryptedUtxo[3]);
     console.log("Readable utxo", readableUtxo);
 
     const amountToWithdrawal = readableUtxo.amount;
