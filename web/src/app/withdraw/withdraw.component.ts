@@ -7,6 +7,8 @@ import { Web3Service } from "../web3.service";
   styleUrls: ['./withdraw.component.css']
 })
 export class WithdrawComponent implements OnInit {
+  amount: number;
+  address: string;
 
   constructor(private web3: Web3Service) {
   }
@@ -96,4 +98,7 @@ export class WithdrawComponent implements OnInit {
 
   }
 
+  withdraw() {
+    console.log(this.amount, this.address);
+  }
 }
