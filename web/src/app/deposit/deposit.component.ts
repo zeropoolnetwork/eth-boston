@@ -35,7 +35,7 @@ export class DepositComponent implements OnInit {
 
     const assetId = w.BigInt(0); // 0 - for eth
     const amount = w.BigInt(amountInWei);
-    const publicKeyOwner = w.BigInt(pbk.K[0]);
+    //const publicKeyOwner = w.BigInt(pbk.K[0]);
 
     this.showLoader = true;
     // setTimeout(() => {
@@ -58,10 +58,8 @@ export class DepositComponent implements OnInit {
     w.getDepositData(
       assetId,
       amount,
-      publicKeyOwner,
       w.txsString,
       w.pk,
-      publicKeyOwner,
       pvk.k
     ).then((a) => {
       const x = w.prepareDataToPushToSmartContract(a);
@@ -87,8 +85,8 @@ export class DepositComponent implements OnInit {
       //   "0x76811b80fa1654e248394614170bc5ef573674f32d4cea30db4456cce23c4805541b9ae2fb276335529df927b97f11cc256aea66ec017455d17573217809f216fa5c92ea0e4603d1aec3db96ec8cc97a1c2296178b7fc50441083be4a216920a69a9a929d83f7bc49cadd16f99651dc6f7c31a65f2b7eba4bd55c5012362b0214c84102ccaeabb1f484be14e9e730099ec3cd0e37310772fd154477f58a55a2b"]
       // this.web3.kovan.deposit(x[0] as any, x[1] as any, x[2] as any, "10000000000000000");
 
-      this.web3.kovan.deposit(publicInputs, snarkProof, utxoDetails, amount.toString()).then((thHash) => {
-        //
+      this.web3.kovan.deposit(publicInputs, snarkProof, utxoDetails, amount.toString()).then((txHash) => {
+         console.log(`Transaction hash: ${txHash}`);
       });
     });
   }

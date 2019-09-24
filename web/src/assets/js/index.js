@@ -1,26 +1,31 @@
-function getDepositData(assetId, amount, owner, transactionJSON, proverKey, privateKey, publicKey) {
+function getDepositData(assetId, amount, transactionJSON, proverKey, privateKey) {
+  const owner = snarkUtils.pubkey(privateKey);
+
   return new Promise((resolve, reject) => {
-    const u = snark.utxo(assetId, amount, snark.pubkey(privateKey), uidRandom());
-    const { inputs, add_utxo } = snark.depositCompute({ asset: snark.utxoToAsset(u), owner: u.owner });
-    const cyphertext = Crypto.encrypt(add_utxo.map(snark.utxoInputs)[0], privateKey, publicKey);
+    const u = snark.utxo(assetId, amount, owner);
+    const {inputs, add_utxo} = snark.depositCompute({asset: snark.utxoToAsset(u), owner: u.owner});
+    const cyphertext = Crypto.encrypt(add_utxo.map(snark.utxoInputs)[0], owner, privateKey);
     snarkUtils.proof(inputs, transactionJSON, proverKey)
       .then(sn => {
         resolve({snark: sn, cyphertext: cyphertext})
+      })
+      .catch((e) => {
+        reject(e);
       })
   });
 }
 
 function getWithdrawalData(privateKey, proverKey, transactionJSON, /*array*/utxos, /*array*/mp_path, receiver, amount) {
   const asset = utxos[mp_path[0]].assetId + ((amount) << 16n);
-  const { mp_sibling, root } = prepareMerkleTree(utxos, mp_path.map(x => Number(x)));
+  const {mp_sibling, root} = prepareMerkleTree(utxos, mp_path.map(x => Number(x)));
   let utxo_in = mp_path.map(i => utxos[i]);
   if (utxo_in.length === 1) {
     utxo_in.push(utxo_in[0]);
     mp_path.push(mp_path[0]);
   }
-  let res = snark.withdrawalPreCompute({ asset, receiver, utxo_in, mp_sibling, mp_path, root });
+  let res = snark.withdrawalPreCompute({asset, receiver, utxo_in, mp_sibling, mp_path, root});
   res = snark.addSignatures(privateKey, res);
-  const { inputs } = snark.withdrawalCompute(res);
+  const {inputs} = snark.withdrawalCompute(res);
   return snarkUtils.proof(inputs, transactionJSON, proverKey);
 }
 
@@ -71,12 +76,13 @@ function hexToBigInt(data) {
 }
 
 function hexToByteArray(data) {
-  data = data.substr(2)
+  if (data.indexOf("0x") === 0)
+    data = data.substr(2);
   const fullBytes = fromHexString(data);
   const countOfArraysToSplit = fullBytes.byteLength / 32;
   const finalArray = [];
   for (let i = 0; i < countOfArraysToSplit; i++)
-    finalArray.push(fullBytes.slice(i*32, (i+1)*32));
+    finalArray.push(fullBytes.slice(i * 32, (i + 1) * 32));
   return finalArray;
 }
 
