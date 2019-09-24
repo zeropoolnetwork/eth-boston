@@ -114,32 +114,59 @@ export class Web3Provider {
   }
 
   public withdrawal(input: any[], proof: any[], encdata1: any[], encdata2: any[]) {
-    return this.sendSmartContract("withdrawal", [input, proof, encdata1, encdata2])
+    return this.sendSmartContract("withdrawal", [input, proof, encdata1, encdata2]);
   }
 
   public transfer(input: any[], proof: any[], encdata1: any[], encdata2: any[], value: string) {
-    return this.sendSmartContract("transfer", [input, proof, encdata1, encdata2], value)
+    return this.sendSmartContract("transfer", [input, proof, encdata1, encdata2], value);
   }
 
-  // public getAllAddUtxoEvents() {
-  //   return new Promise((resolve, reject) => {
-  //     this.contractInstance.AddUtxo((res, err) => {
-  //       if (err) {
-  //         reject(err);
-  //       }
-  //       resolve(res);
-  //     });
-  //   });
-  // }
-  //
-  // public getAllAddEcryptedUtxoMessage() {
-  //   return new Promise((resolve, reject) => {
-  //     this.contractInstance.AddEcryptedUtxoMessage((res, err) => {
-  //       if (err) {
-  //         reject(err);
-  //       }
-  //       resolve(res);
-  //     });
-  //   });
-  // }
+//   var events = myContractInstance.allEvents([additionalFilterObject]);
+// // watch for changes
+//   events.watch(function(error, event){
+//     if (!error)
+//       console.log(event);
+//   });
+// // Or pass a callback to start watching immediately
+//   var events = myContractInstance.allEvents([additionalFilterObject], function(error, log){
+//     if (!error)
+//       console.log(log);
+//   });
+
+  public getAllAddUtxoEvents(): Promise<string[]> {
+
+    return new Promise((resolve, reject) => {
+      const events = this.contractInstance.allEvents({fromBlock: 0, toBlock: 'latest'});
+      events.get(function (error, logs) {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        const result = logs
+          .filter(item => item.event === 'AddUtxo')
+          .map(item => item.args.utxo.toString(16));
+
+        resolve(result);
+      });
+    });
+  }
+
+  public getAllAddEcryptedUtxoMessageEvents(): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      const events = this.contractInstance.allEvents({fromBlock: 0, toBlock: 'latest'});
+      events.get(function (error, logs) {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        const result = logs
+          .filter(item => item.event === 'AddEcryptedUtxoMessage')
+          .map(item => item.args.data);
+
+        resolve(result);
+      });
+    });
+  }
 }

@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {Web3Service} from "../web3.service";
+import { Component, OnInit } from '@angular/core';
+import { Web3Service } from "../web3.service";
 
 @Component({
   selector: 'app-withdraw',
@@ -11,13 +11,26 @@ export class WithdrawComponent implements OnInit {
   constructor(private web3: Web3Service) {
   }
 
-  ngOnInit() {
-    this.withdrawal();
+  async ngOnInit(): Promise<void> {
+
+    const hashedUtxo = await this.web3.kovan.getAllAddUtxoEvents();
+    const ecryptedUtxo = await this.web3.kovan.getAllAddEcryptedUtxoMessageEvents();
+    // debugger
+
+    const w = window as any;
+    const pvk = w.HDWallet
+      .Privkey("shiver box little burden auto early shine vote dress symptom plate certain course open rely",
+        "m/44'/0'/0'/0/0"
+      );
+
+    const result = this.findOwnerOutputs(ecryptedUtxo, pvk.k);
+    // debugger
+    // this.withdrawal();
   }
 
-  findOwnerOutputs(/*array*/encryptedOutputs, privateKey) {
+  findOwnerOutputs(encryptedOutputs: string[], privateKey: any) {
     const w = window as any;
-
+    encryptedOutputs = encryptedOutputs.map(x => w.hexToBigInt(x));
     const pbk = w.snarkUtils.pubkey(privateKey);
     console.log(`Public key: ${pbk}`);
 
@@ -60,15 +73,15 @@ export class WithdrawComponent implements OnInit {
     console.log(`To Address: ${toAddress}`);
 
     w.getWithdrawalData({
-      privateKey: pvk.k,
-      proverKey: w.pk,
-    }, {
-      receiver: toAddress,
-      amount: amountToWithdrawal,
-    }, {
-      utxoToWithdrawal: readableUtxo,
-      hashedUtxo: [w.snark.utxoHash(readableUtxo[0])]
-    }, w.txsString)
+        privateKey: pvk.k,
+        proverKey: w.pk,
+      }, {
+        receiver: toAddress,
+        amount: amountToWithdrawal,
+      }, {
+        utxoToWithdrawal: readableUtxo,
+        hashedUtxo: [w.snark.utxoHash(readableUtxo[0])]
+      }, w.txsString)
       .then(x => {
         const data = w.prepareWithdrawalDataToPushToSmartContract(x);
 
