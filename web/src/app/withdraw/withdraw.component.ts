@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Web3Service } from "../web3.service";
+import {Component, OnInit} from '@angular/core';
+import {Web3Service} from "../web3.service";
 
 @Component({
   selector: 'app-withdraw',
@@ -15,6 +15,26 @@ export class WithdrawComponent implements OnInit {
     this.withdrawal();
   }
 
+  findOwnerOutputs(/*array*/encryptedOutputs, privateKey) {
+    const w = window as any;
+
+    const pbk = w.snarkUtils.pubkey(privateKey);
+    console.log(`Public key: ${pbk}`);
+
+    const ownerOutputs = {};
+    encryptedOutputs.forEach((encryptedUtxo, i) => {
+      try {
+        const decryptedOutput = w.Crypto.decrypt(encryptedUtxo, pbk, privateKey);
+        if (decryptedOutput[2] === pbk) {
+          ownerOutputs[i] = w.snark.utxo(...decryptedOutput);
+        }
+      } catch (e) {
+        // ignore
+      }
+    });
+    return ownerOutputs;
+  }
+
   withdrawal() {
     const w = window as any;
 
@@ -22,40 +42,33 @@ export class WithdrawComponent implements OnInit {
       .Privkey("shiver box little burden auto early shine vote dress symptom plate certain course open rely",
         "m/44'/0'/0'/0/0"
       );
-    const pbk = w.snarkUtils.pubkey(pvk.k);
-
     console.log(`Private key: ${pvk.k}`);
-    console.log(`Public key: ${pbk}`);
 
-    // tslint:disable-next-line:max-line-length
-    const encryptedUtxo = w.hexToBigInt("27fc96c235b9409c23c6664282549eb5bfe14a9a56d61d54af1479c07390241642ffafaf6c283c4c8c8ea71665ba7d7c3ab32ebf04f933f52af1850e432c2d28b8773e4c34595013e4b6d0601b8fa19e00f8e3c85e5df564a3e9b5817edcee0caa2b2b6bd41ed115d6344b09ac7b22f7c4b16b0fa76856b565b8bbdabd223e205fbadcf58cead6246242ffe857d549681981ee67b640ffd1bacfc3ec78fc8d34");
+    const encryptedUtxo = w.hexToBigInt("27fc96c235b9409c23c6664282549eb5bfe14a9a56d61d54af1479c07390241642ffafaf" +
+      "6c283c4c8c8ea71665ba7d7c3ab32ebf04f933f52af1850e432c2d28b8773e4c34595013e4b6d0601b8fa19e00f8e3c85e5df564a3e9" +
+      "b5817edcee0caa2b2b6bd41ed115d6344b09ac7b22f7c4b16b0fa76856b565b8bbdabd223e205fbadcf58cead6246242ffe857d549681" +
+      "981ee67b640ffd1bacfc3ec78fc8d34");
     console.log(`Encrypted utxo: ${encryptedUtxo}`);
 
-    const decryptedUtxo = w.Crypto.decrypt(encryptedUtxo, pbk, pvk.k);
-    console.log("Decrypted utxo", decryptedUtxo);
+    const readableUtxo = this.findOwnerOutputs([encryptedUtxo], pvk.k);
+    console.log("Readable Utxo", readableUtxo);
 
-    const readableUtxo = w.snark.utxo(decryptedUtxo[0], decryptedUtxo[1], decryptedUtxo[2], decryptedUtxo[3]);
-    console.log("Readable utxo", readableUtxo);
-
-    const amountToWithdrawal = readableUtxo.amount;
+    const amountToWithdrawal = readableUtxo["0"].amount; // need amount from frontend input
     console.log(`Amount to withdrawal: ${amountToWithdrawal}`);
 
     const toAddress = w.snarkUtils.randrange(0n, 1n << 160n);
     console.log(`To Address: ${toAddress}`);
 
-    const mp_path = 0;
-    console.log(`mp_path: ${mp_path}`);
-
     w.getWithdrawalData({
-        privateKey: pvk.k,
-        proverKey: w.pk,
-      }, {
-        receiver: toAddress,
-        amount: amountToWithdrawal,
-      }, {
-        utxoToWithdrawal: {"0": readableUtxo},
-        hashedUtxo: [w.snark.utxoHash(readableUtxo)]
-      }, w.txsString)
+      privateKey: pvk.k,
+      proverKey: w.pk,
+    }, {
+      receiver: toAddress,
+      amount: amountToWithdrawal,
+    }, {
+      utxoToWithdrawal: readableUtxo,
+      hashedUtxo: [w.snark.utxoHash(readableUtxo[0])]
+    }, w.txsString)
       .then(x => {
         const data = w.prepareWithdrawalDataToPushToSmartContract(x);
 
