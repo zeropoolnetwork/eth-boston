@@ -59,13 +59,11 @@ export class WithdrawComponent implements OnInit {
       .then(x => {
         const data = w.prepareWithdrawalDataToPushToSmartContract(x);
 
-        const publicInputs = data[0];
+        const [publicInputs, proof, cyphertext1, cyphertext2] = data;
+
         console.log("Public inputs", publicInputs);
-        const proof = data[1];
         console.log("Proof", proof);
-        const cyphertext1 = data[2];
         console.log(`Cyphertext1: ${cyphertext1}`);
-        const cyphertext2 = data[3];
         console.log(`Cyphertext2: ${cyphertext2}`);
 
         this.web3.kovan.withdrawal(publicInputs, proof, cyphertext1, cyphertext2).then((txHash) => {
