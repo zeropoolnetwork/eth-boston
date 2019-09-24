@@ -15,16 +15,22 @@ function getDepositData(assetId, amount, transactionJSON, proverKey, privateKey)
   });
 }
 
-function getWithdrawalData(privateKey, proverKey, transactionJSON, /*array*/utxos, /*array*/mp_path, receiver, amount) {
+function getWithdrawalData({privateKey, proverKey},
+                           {receiver, amount},
+                           {/*object*/utxoToWithdrawal, /*array*/hashedUtxo},
+                           transactionJSON) {
   const owner = snarkUtils.pubkey(privateKey);
 
-  const asset = utxos[mp_path[0]].assetId + ((amount) << 16n);
-  const {mp_sibling, root} = prepareMerkleTree(utxos, mp_path.map(x => Number(x)));
-  let utxo_in = mp_path.map(i => utxos[i]);
-  if (utxo_in.length === 1) {
+  const utxo_in = Object.values(utxoToWithdrawal);
+  const mp_path = Object.keys(utxoToWithdrawal).map(x => Number(x));
+  if (utxo_in.length === 1 && mp_path.length === 1) {
     utxo_in.push(utxo_in[0]);
     mp_path.push(mp_path[0]);
   }
+
+  const asset = utxo_in[0].assetId + ((amount) << 16n);
+
+  const {mp_sibling, root} = getProof(hashedUtxo, mp_path);
 
   return new Promise((resolve, reject) => {
     let res = snark.withdrawalPreCompute({asset, receiver, utxo_in, mp_sibling, mp_path, root});
@@ -42,8 +48,8 @@ function getWithdrawalData(privateKey, proverKey, transactionJSON, /*array*/utxo
   });
 }
 
-function prepareMerkleTree(/*array*/utxos, /*array*/mp_path) {
-  const merkleTree = getState(utxos);
+function getProof(/*array*/hashedUtxo, /*array*/mp_path) {
+  const merkleTree = getState(hashedUtxo);
   const mp_sibling = mp_path.map(e => merkleTree.proof(e));
   const root = merkleTree.root;
   return {
@@ -56,7 +62,7 @@ function prepareMerkleTree(/*array*/utxos, /*array*/mp_path) {
 function getState(/*array*/utxos) {
   const proofLength = 30;
   const mtree = new tree.MerkleTree(proofLength + 1);
-  utxos.forEach(u => mtree.push(snark.utxoHash(u)));
+  utxos.forEach(u => mtree.push(u));
   return mtree;
 }
 
