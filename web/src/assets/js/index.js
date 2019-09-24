@@ -16,6 +16,8 @@ function getDepositData(assetId, amount, transactionJSON, proverKey, privateKey)
 }
 
 function getWithdrawalData(privateKey, proverKey, transactionJSON, /*array*/utxos, /*array*/mp_path, receiver, amount) {
+  const owner = snarkUtils.pubkey(privateKey);
+
   const asset = utxos[mp_path[0]].assetId + ((amount) << 16n);
   const {mp_sibling, root} = prepareMerkleTree(utxos, mp_path.map(x => Number(x)));
   let utxo_in = mp_path.map(i => utxos[i]);
@@ -23,10 +25,21 @@ function getWithdrawalData(privateKey, proverKey, transactionJSON, /*array*/utxo
     utxo_in.push(utxo_in[0]);
     mp_path.push(mp_path[0]);
   }
-  let res = snark.withdrawalPreCompute({asset, receiver, utxo_in, mp_sibling, mp_path, root});
-  res = snark.addSignatures(privateKey, res);
-  const {inputs} = snark.withdrawalCompute(res);
-  return snarkUtils.proof(inputs, transactionJSON, proverKey);
+
+  return new Promise((resolve, reject) => {
+    let res = snark.withdrawalPreCompute({asset, receiver, utxo_in, mp_sibling, mp_path, root});
+    res = snark.addSignatures(privateKey, res);
+    const {inputs} = snark.withdrawalCompute(res);
+    const cyphertext1 = Crypto.encrypt(inputs.utxo_out[0], owner, privateKey);
+    const cyphertext2 = Crypto.encrypt(inputs.utxo_out[1], owner, privateKey);
+    snarkUtils.proof(inputs, transactionJSON, proverKey)
+      .then(sn => {
+        resolve({snark: sn, cyphertext1: cyphertext1, cyphertext2: cyphertext2})
+      })
+      .catch((e) => {
+        reject(e);
+      })
+  });
 }
 
 function prepareMerkleTree(/*array*/utxos, /*array*/mp_path) {
@@ -68,6 +81,14 @@ function prepareDataToPushToSmartContract(data) {
   const publicInputs = data.snark.publicSignals;
   const cyphertext = bigIntArrayToHex(data.cyphertext);
   return [[...publicInputs], [...proof], "0x" + cyphertext]
+}
+
+function prepareWithdrawalDataToPushToSmartContract(data) {
+  const proof = linearize_proof(data.snark.proof);
+  const publicInputs = data.snark.publicSignals;
+  const cyphertext1 = bigIntArrayToHex(data.cyphertext1);
+  const cyphertext2 = bigIntArrayToHex(data.cyphertext2);
+  return [[...publicInputs], [...proof], "0x" + cyphertext1, "0x" + cyphertext2]
 }
 
 function hexToBigInt(data) {

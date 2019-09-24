@@ -113,8 +113,8 @@ export class Web3Provider {
     return this.sendSmartContract("deposit", [input, proof, encdata1], value);
   }
 
-  public withdrawal(input: any[], proof: any[], encdata1: any[], encdata2: any[], value: string) {
-    return this.sendSmartContract("withdrawal", [input, proof, encdata1, encdata2], value)
+  public withdrawal(input: any[], proof: any[], encdata1: any[], encdata2: any[]) {
+    return this.sendSmartContract("withdrawal", [input, proof, encdata1, encdata2])
   }
 
   public transfer(input: any[], proof: any[], encdata1: any[], encdata2: any[], value: string) {
