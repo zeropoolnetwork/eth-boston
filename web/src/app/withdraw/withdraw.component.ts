@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Web3Service } from "../web3.service";
 
 @Component({
@@ -47,24 +47,21 @@ export class WithdrawComponent implements OnInit {
     console.log(`mp_path: ${mp_path}`);
 
     w.getWithdrawalData({
-      privateKey: pvk.k,
-      proverKey: w.pk,
-    }, {
-      receiver: toAddress,
-      amount: amountToWithdrawal,
-    }, {
-      utxoToWithdrawal: {"0": readableUtxo},
-      hashedUtxo: [w.snark.utxoHash(readableUtxo)]
-    }, w.txsString)
+        privateKey: pvk.k,
+        proverKey: w.pk,
+      }, {
+        receiver: toAddress,
+        amount: amountToWithdrawal,
+      }, {
+        utxoToWithdrawal: {"0": readableUtxo},
+        hashedUtxo: [w.snark.utxoHash(readableUtxo)]
+      }, w.txsString)
       .then(x => {
         const data = w.prepareWithdrawalDataToPushToSmartContract(x);
 
+        // console.table(data);
         const [publicInputs, proof, cyphertext1, cyphertext2] = data;
-
-        console.log("Public inputs", publicInputs);
-        console.log("Proof", proof);
-        console.log(`Cyphertext1: ${cyphertext1}`);
-        console.log(`Cyphertext2: ${cyphertext2}`);
+        console.table({publicInputs, proof, cyphertext1, cyphertext2});
 
         this.web3.kovan.withdrawal(publicInputs, proof, cyphertext1, cyphertext2).then((txHash) => {
           console.log(`Transaction hash: ${txHash}`);
