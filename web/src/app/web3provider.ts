@@ -91,7 +91,6 @@ export class Web3Provider {
   }
 
   public sendSmartContract(methodName: string, parameters: any[] = [], value: string = '') {
-    debugger
     return new Promise((resolve, reject) => {
       this.contractInstance[methodName](...parameters, { value }, (err, res) => {
         if (err) {
@@ -110,12 +109,10 @@ export class Web3Provider {
   }
 
   public deposit(input: any[], proof: any[], encdata1: any[], value: string) {
-    // debugger
     return this.sendSmartContract("deposit", [input, proof, encdata1], value);
   }
 
   public withdrawal(input: any[], proof: any[], encdata1: any[], encdata2: any[]) {
-    debugger
     return this.sendSmartContract("withdrawal", [input, proof, encdata1, encdata2]);
   }
 

@@ -14,7 +14,7 @@ export class WithdrawComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.withdrawal();
+
   }
 
 
@@ -55,10 +55,10 @@ export class WithdrawComponent implements OnInit {
     const ownerOutputs = this.findOwnerOutputs(ecryptedUtxo, pvk.k);
     console.log(`Owner outputs`, ownerOutputs);
 
-    const amountToWithdrawal = 1000000000000000n; // need amount from frontend input
+    const amountToWithdrawal = w.BigInt(this.amount * 1e18); // need amount from frontend input
     console.log(`Amount to withdrawal: ${amountToWithdrawal}`);
 
-    const toAddress = w.hexToBigInt("0x7253c920a947F74e4361aF52521FA6cc686Ff8f4")[0];
+    const toAddress = w.hexToBigInt(this.address)[0];
     // const toAddress = w.snarkUtils.randrange(0n, 1n << 160n);
     console.log(`To Address: ${toAddress}`);
 
@@ -85,9 +85,5 @@ export class WithdrawComponent implements OnInit {
         });
       });
 
-  }
-
-  withdraw() {
-    console.log(this.amount, this.address);
   }
 }
