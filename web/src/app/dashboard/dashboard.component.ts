@@ -44,6 +44,11 @@ export class DashboardComponent implements OnInit {
       // },
     ];
 
+    this.getPrivateBalance()
+      .then(balance => {
+        this.balance = Number(balance) / 1e18; // todo: make it
+      });
+
     // const pubKey = this.publicKey;
     // const w = window as any;
     // setInterval(() => {
@@ -70,6 +75,48 @@ export class DashboardComponent implements OnInit {
         label: 'WETH'
       },
     ];
+  }
+
+  async getPrivateBalance() {
+    const w = window as any;
+
+    const hashedUtxo = (await this.web3.kovan.getAllAddUtxoEvents()).map(x => w.BigInt(x));
+    console.log("leafs", hashedUtxo);
+
+    const ecryptedUtxo = await this.web3.kovan.getAllAddEcryptedUtxoMessageEvents();
+
+    const pvk = w.HDWallet
+      .Privkey("shiver box little burden auto early shine vote dress symptom plate certain course open rely",
+        "m/44'/0'/0'/0/0"
+      );
+
+    const ownerOutputs = this.findOwnerOutputs(ecryptedUtxo, pvk.k);
+    const balance = this.findUnspendUtxo(Object.values(ownerOutputs));
+    return balance;
+  }
+
+  private findUnspendUtxo(outputs: any) {
+    return outputs.map(x => x.amount).reduce((acc, x) => acc += x)
+  }
+
+  private findOwnerOutputs(encryptedOutputs: string[], privateKey: any) {
+    const w = window as any;
+    encryptedOutputs = encryptedOutputs.map(x => w.hexToBigInt(x));
+    const pbk = w.snarkUtils.pubkey(privateKey);
+    console.log(`Public key: ${pbk}`);
+
+    const ownerOutputs = {};
+    encryptedOutputs.forEach((encryptedUtxo, i) => {
+      try {
+        const decryptedOutput = w.Crypto.decrypt(encryptedUtxo, pbk, privateKey);
+        if (decryptedOutput[2] === pbk) {
+          ownerOutputs[i] = w.snark.utxo(...decryptedOutput);
+        }
+      } catch (e) {
+        // ignore
+      }
+    });
+    return ownerOutputs;
   }
 
   approveAsset() {
