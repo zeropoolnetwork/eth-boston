@@ -143,6 +143,8 @@ contract MiMCTree {
     nullifier[input[1]] = true;
     nullifier[input[2]] = true;
     target.transfer(amount);
+    emit AddNullifier(input[1]);
+    emit AddNullifier(input[2]);
     return true;
   }
 
@@ -170,6 +172,8 @@ contract MiMCTree {
     emit AddEcryptedUtxoMessage(encdata2);
     nullifier[input[1]] = true;
     nullifier[input[2]] = true;
+    emit AddNullifier(input[1]);
+    emit AddNullifier(input[2]);
     return true;
   }
 
