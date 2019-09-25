@@ -3,11 +3,11 @@ function getDepositData(assetId, amount, transactionJSON, proverKey, privateKey)
 
   return new Promise((resolve, reject) => {
     const u = snark.utxo(assetId, amount, owner);
-    const {inputs, add_utxo} = snark.depositCompute({asset: snark.utxoToAsset(u), owner: u.owner});
+    const { inputs, add_utxo } = snark.depositCompute({ asset: snark.utxoToAsset(u), owner: u.owner });
     const cyphertext = Crypto.encrypt(add_utxo.map(snark.utxoInputs)[0], owner, privateKey);
     snarkUtils.proof(inputs, transactionJSON, proverKey)
       .then(sn => {
-        resolve({snark: sn, cyphertext: cyphertext})
+        resolve({ snark: sn, cyphertext: cyphertext })
       })
       .catch((e) => {
         reject(e);
@@ -15,32 +15,42 @@ function getDepositData(assetId, amount, transactionJSON, proverKey, privateKey)
   });
 }
 
-function getWithdrawalData({privateKey, proverKey},
-                           {receiver, amount},
-                           {/*object*/utxoToWithdrawal, /*array*/hashedUtxo},
+function getWithdrawalData({ privateKey, proverKey },
+                           { receiver, amount },
+                           { /*object*/ownerUtxo, /*array*/hashedUtxo },
                            transactionJSON) {
   const owner = snarkUtils.pubkey(privateKey);
 
-  const utxo_in = Object.values(utxoToWithdrawal);
-  const mp_path = Object.keys(utxoToWithdrawal).map(x => Number(x));
+  const { utxo_in } = Object.values(ownerUtxo).reduce((acc, x) => {
+    if (acc.amount >= amount)
+      return acc;
+
+    acc.amount = acc.amount.add(x.amount);
+    acc.utxo_in.push(x);
+    return acc;
+  }, { utxo_in: [], amount: 0n });
+
+  const mp_path = Object.keys(ownerUtxo).map(x => Number(x)).slice(0, utxo_in.length);
   if (utxo_in.length === 1 && mp_path.length === 1) {
     utxo_in.push(utxo_in[0]);
     mp_path.push(mp_path[0]);
   }
 
+  // todo: should mp_path === 2, should utxo_in === 2
+
   const asset = utxo_in[0].assetId + ((amount) << 16n);
 
-  const {mp_sibling, root} = getProof(hashedUtxo, mp_path);
+  const { mp_sibling, root } = getProof(hashedUtxo, mp_path);
 
   return new Promise((resolve, reject) => {
-    let res = snark.withdrawalPreCompute({asset, receiver, utxo_in, mp_sibling, mp_path, root});
+    let res = snark.withdrawalPreCompute({ asset, receiver, utxo_in, mp_sibling, mp_path, root });
     res = snark.addSignatures(privateKey, res);
-    const {inputs} = snark.withdrawalCompute(res);
+    const { inputs } = snark.withdrawalCompute(res);
     const cyphertext1 = Crypto.encrypt(inputs.utxo_out[0], owner, privateKey);
     const cyphertext2 = Crypto.encrypt(inputs.utxo_out[1], owner, privateKey);
     snarkUtils.proof(inputs, transactionJSON, proverKey)
       .then(sn => {
-        resolve({snark: sn, cyphertext1: cyphertext1, cyphertext2: cyphertext2})
+        resolve({ snark: sn, cyphertext1: cyphertext1, cyphertext2: cyphertext2 })
       })
       .catch((e) => {
         reject(e);
@@ -62,7 +72,9 @@ function getProof(/*array*/hashedUtxo, /*array*/mp_path) {
 function getState(/*array*/utxos) {
   const proofLength = 30;
   const mtree = new tree.MerkleTree(proofLength + 1);
-  utxos.forEach(u => mtree.push(u));
+  utxos.forEach(u => {
+    return mtree.push(u)
+  });
   return mtree;
 }
 

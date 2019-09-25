@@ -128,11 +128,11 @@ contract MiMCTree {
     uint assetId = input[4] & 0xFFFF;
     uint amount = input[4] >> 16;
     address payable target = address(uint160(input[5]));
-    require((nullifier[input[1]] || nullifier[input[2]]) == false);
-    require(merkleRoot()==input[0]);
-    require(assetId==0);
-    require((input[5] >> 160) == 1);
-    require(Groth16Verifier.verify(input, proof, vk));
+    require((nullifier[input[1]] || nullifier[input[2]]) == false, "(nullifier[input[1]] || nullifier[input[2]]) != false");
+    require(merkleRoot()==input[0], "merkleRoot() != input[0]");
+    require(assetId==0, "assetId != 0");
+    require((input[5] >> 160) == 1, "input[5] >> 160 != 1");
+    require(Groth16Verifier.verify(input, proof, vk), "verify failed");
     uint[] memory utxos = new uint[](1);
     utxos[0] = input[3];
     _merklePush(utxos);
