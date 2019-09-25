@@ -51,6 +51,7 @@ export class WithdrawComponent implements OnInit {
         "m/44'/0'/0'/0/0"
       );
 
+    // todo: check outputs for unspent
     const ownerOutputs = this.findOwnerOutputs(ecryptedUtxo, pvk.k);
     console.log(`Owner outputs`, ownerOutputs);
 

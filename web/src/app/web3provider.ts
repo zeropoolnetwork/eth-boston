@@ -79,13 +79,13 @@ export class Web3Provider {
     });
   }
 
-  public callSmartContract(methodName: string) {
+  public callSmartContract(methodName: string, ...params) {
     return new Promise((resolve, reject) => {
-      this.contractInstance[methodName].call((err, res) => {
+      this.contractInstance[methodName].call(...params, (err, res) => {
         if (err) {
           reject(err);
         }
-        resolve(Web3Provider.fromHexToString(res));
+        resolve(res);
       });
     });
   }
@@ -172,6 +172,27 @@ export class Web3Provider {
         const result = logs
           .filter(item => item.event === 'AddEcryptedUtxoMessage')
           .map(item => item.args.data);
+
+        resolve(result);
+      });
+    });
+  }
+
+  public getAllAddNullifierEvents(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const events = this.contractInstance.allEvents({ fromBlock: 0, toBlock: 'latest' });
+      events.get(function (error, logs) {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        logs.sort(function (a, b) {
+          return a.blockNumber - b.blockNumber;
+        });
+        const result = logs
+          .filter(item => item.event === 'AddNullifier')
+          .map(item => item.args.nullifier);
 
         resolve(result);
       });

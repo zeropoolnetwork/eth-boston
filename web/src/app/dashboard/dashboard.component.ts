@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
 
     this.getPrivateBalance()
       .then(balance => {
-        this.balance = Number(balance) / 1e18; // todo: make it
+        this.balance = Number(balance) / 1e18; // todo: make it safe
       });
 
     // const pubKey = this.publicKey;
@@ -83,6 +83,8 @@ export class DashboardComponent implements OnInit {
     const hashedUtxo = (await this.web3.kovan.getAllAddUtxoEvents()).map(x => w.BigInt(x));
     console.log("leafs", hashedUtxo);
 
+    const nullifiers = await this.web3.kovan.getAllAddNullifierEvents();
+
     const ecryptedUtxo = await this.web3.kovan.getAllAddEcryptedUtxoMessageEvents();
 
     const pvk = w.HDWallet
@@ -91,12 +93,17 @@ export class DashboardComponent implements OnInit {
       );
 
     const ownerOutputs = this.findOwnerOutputs(ecryptedUtxo, pvk.k);
-    const balance = this.findUnspendUtxo(Object.values(ownerOutputs));
+    const balance = this.calculateUnspentBalance(pvk.k, Object.values(ownerOutputs), nullifiers);
     return balance;
   }
 
-  private findUnspendUtxo(outputs: any) {
-    return outputs.map(x => x.amount).reduce((acc, x) => acc += x)
+  private calculateUnspentBalance(pvk: any, outputs: any, nullifiers: any) {
+    return outputs.map(x => {
+      const currentNullifier = (window as any).snark.utxoVRF(pvk, x);
+      if (nullifiers.indexOf(currentNullifier) !== -1)
+        return 0;
+      return x.amount
+    }).reduce((acc, x) => acc += x)
   }
 
   private findOwnerOutputs(encryptedOutputs: string[], privateKey: any) {
