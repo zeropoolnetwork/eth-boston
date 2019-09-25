@@ -39,22 +39,26 @@ export class WithdrawComponent implements OnInit {
   }
 
   async withdrawal() {
-    const hashedUtxo = await this.web3.kovan.getAllAddUtxoEvents();
-    const ecryptedUtxo = await this.web3.kovan.getAllAddEcryptedUtxoMessageEvents();
-  console.log(hashedUtxo);
     const w = window as any;
+
+    const hashedUtxo = (await this.web3.kovan.getAllAddUtxoEvents()).map(x => w.BigInt(x));
+    console.log("leafs", hashedUtxo);
+
+    const ecryptedUtxo = await this.web3.kovan.getAllAddEcryptedUtxoMessageEvents();
+
     const pvk = w.HDWallet
       .Privkey("shiver box little burden auto early shine vote dress symptom plate certain course open rely",
         "m/44'/0'/0'/0/0"
       );
 
     const ownerOutputs = this.findOwnerOutputs(ecryptedUtxo, pvk.k);
+    console.log(`Owner outputs`, ownerOutputs);
 
     const amountToWithdrawal = 1000000000000000n; // need amount from frontend input
     console.log(`Amount to withdrawal: ${amountToWithdrawal}`);
 
-    // const toAddress = w.hexToBigInt("0x7253c920a947F74e4361aF52521FA6cc686Ff8f4")[0];
-    const toAddress = w.snarkUtils.randrange(0n, 1n << 160n);
+    const toAddress = w.hexToBigInt("0x7253c920a947F74e4361aF52521FA6cc686Ff8f4")[0];
+    // const toAddress = w.snarkUtils.randrange(0n, 1n << 160n);
     console.log(`To Address: ${toAddress}`);
 
     w.getWithdrawalData({
@@ -65,15 +69,16 @@ export class WithdrawComponent implements OnInit {
       amount: amountToWithdrawal,
     }, {
       ownerUtxo: ownerOutputs,
-      hashedUtxo: hashedUtxo.map(x => w.BigInt(x))
+      hashedUtxo: hashedUtxo
     }, w.txsString)
       .then(x => {
         const data = w.prepareWithdrawalDataToPushToSmartContract(x);
 
         // console.table(data);
         const [publicInputs, proof, cyphertext1, cyphertext2] = data;
+
         console.table({ publicInputs, proof, cyphertext1, cyphertext2 });
-        debugger
+
         this.web3.kovan.withdrawal(publicInputs, proof, cyphertext1, cyphertext2).then((txHash) => {
           console.log(`Transaction hash: ${txHash}`);
         });
