@@ -5,7 +5,7 @@ const { groth, Circuit, bigInt } = snarkjs;
 
 const { stringifyBigInts, unstringifyBigInts } = require("snarkjs/src/stringifybigint");
 
-const { buildGroth16 } = require("websnark");
+const buildBn128 = require("websnark/src/bn128.js");
 const buildpkey = require("./buildpkey.js");
 const buildwitness = require("./buildwitness.js");
 const crypto = require("crypto");
@@ -51,24 +51,31 @@ function witness(input, name) {
   return witness;
 }
 
-let wasmgroth = undefined;
+let bn128 = undefined;
 async function proof(input, name) {
-  if (typeof (wasmgroth) === "undefined") {
-    wasmgroth = await buildGroth16();
+  if (typeof (bn128) === "undefined") {
+    bn128 = await buildBn128();
   }
 
   const circuit = new Circuit(fload(`${__dirname}/../circuitsCompiled/${name}.json`));
-  const pk = fload(`${__dirname}/../circuitsCompiled/${name}_pk.json`);
   const witness = circuit.calculateWitness(input);
-  const proof = unstringifyBigInts(await wasmgroth.proof(buildwitness(witness), buildpkey(pk)));
-  proof.protocol = "groth";
 
+  // const pk = fload(`${__dirname}/../circuitsCompiled/${name}_pk.json`);
+  // return groth.genProof(pk, witness);
+
+  const pk = fs.readFileSync(`${__dirname}/../circuitsCompiled/${name}_pk.bin`).buffer;
+  const proof = unstringifyBigInts(await bn128.groth16GenProof(buildwitness(witness), pk));
   return { proof, publicSignals: witness.slice(1, circuit.nPubInputs + circuit.nOutputs + 1) };
+
 }
 
-function verify({ proof, publicSignals }, name) {
+async function verify({ proof, publicSignals }, name) {
+  if (typeof (bn128) === "undefined") {
+    bn128 = await buildBn128();
+  }
   const vk = fload(`./circuitsCompiled/${name}_vk.json`);
-  return groth.isValid(vk, proof, publicSignals);
+  //return groth.isValid(vk, proof, publicSignals);
+  return await bn128.groth16Verify(vk, publicSignals, proof);
 }
 
 function pubkey(pk) {

@@ -20,10 +20,52 @@ function depositTest() {
 async function depositTest_Proof_and_verify() {
   const u = utxoRandom();
   const { inputs } = depositCompute({ asset: utxoToAsset(u), owner: u.owner });
+  console.log(inputs);
   const pi = await proof(inputs, "transaction");
-  console.log(verify(pi, "transaction"));
+  console.log(pi.proof, pi.publicSignals);
+  console.log(await verify(pi, "transaction"));
 
 }
+
+async function withdrawalTest_Proof_and_verify() {
+  const st = genRandomState({ assetId: true });
+  const mp_path = Array(2).fill(0).map(() => randrange(0, st.utxos.length));
+
+  const receiver = randrange(0n, 1n << 160n);
+  const mp_sibling = mp_path.map(e => st.tree.proof(e));
+  const asset = st.utxos[mp_path[0]].assetId + ((st.utxos[mp_path[0]].amount / 2n) << 16n);
+  const root = st.tree.root;
+  const utxo_in = mp_path.map(i => st.utxos[i]);
+
+  let res = withdrawalPreCompute({ asset, receiver, utxo_in, mp_sibling, mp_path, root });
+  res = addSignatures(st.pk, res);
+  const { inputs } = withdrawalCompute(res);
+  console.log(inputs);
+  //const w = witness(inputs, "transaction");
+  const pi = await proof(inputs, "transaction");
+  console.log(pi.proof, pi.publicSignals);
+  console.log(await verify(pi, "transaction"));
+
+}
+
+async function transferTest_Proof_and_verify() {
+  const st = genRandomState({ assetId: true });
+  const mp_path = Array(2).fill(0).map(() => randrange(0, st.utxos.length));
+
+  const txbound = randrange(0n, 1n << 160n);
+  const mp_sibling = mp_path.map(e => st.tree.proof(e));
+  const utxo_out = _.defaults({ amount: st.utxos[mp_path[0]].amount / 2n }, st.utxos[mp_path[0]]);
+  const root = st.tree.root;
+  const utxo_in = mp_path.map(i => st.utxos[i]);
+
+  let res = transferPreCompute({ txbound, utxo_out, utxo_in, mp_sibling, mp_path, root });
+  res = addSignatures(st.pk, res);
+  const { inputs } = transferCompute(res);
+  const pi = await proof(inputs, "transaction");
+  console.log(pi.proof, pi.publicSignals);
+  console.log(await verify(pi, "transaction"));
+}
+
 
 function genRandomState(fixed) {
   const max_test_elements = Math.min(32, 1 << proofLength);
@@ -38,7 +80,7 @@ function genRandomState(fixed) {
   return { pk, utxos, tree };
 }
 
-function withdrawalTest() {
+async function withdrawalTest() {
   const st = genRandomState({ assetId: true });
   const mp_path = Array(2).fill(0).map(() => randrange(0, st.utxos.length));
 
@@ -179,30 +221,32 @@ function transfer2Test3() {
 
 
 describe("Deposit", function () {
-  this.timeout(80000);
-  it("Should prove deposit", depositTest)
+  this.timeout(80000000);
+  //   it("Should prove deposit", depositTest)
+  // it("Should prove and verify transfer", transferTest_Proof_and_verify);
   it("Should prove and verify deposit", depositTest_Proof_and_verify);
 })
 
 describe("Withdrawal", function () {
-  this.timeout(80000);
-  it("Should withdraw for 2 inputs", withdrawalTest);
-  it("Should withdraw for 1 input", withdrawalTest2);
+  this.timeout(80000000);
+  it("Should prove and verify withdrawal", withdrawalTest_Proof_and_verify);
+  //  it("Should withdraw for 2 inputs", withdrawalTest);
+  //  it("Should withdraw for 1 input", withdrawalTest2);
 })
 
-describe("Transfer", function () {
-  this.timeout(80000);
-  it("Should transfer for 2 same asset type inputs", transferTest);
-  it("Should transfer for 2 different asset inputs", transferTest2);
-  it("Should transfer for 1 input", transferTest3);
-})
+// describe("Transfer", function () {
+//   this.timeout(80000);
+//   it("Should transfer for 2 same asset type inputs", transferTest);
+//   it("Should transfer for 2 different asset inputs", transferTest2);
+//   it("Should transfer for 1 input", transferTest3);
+// })
 
-describe("Partial transfer", function () {
-  this.timeout(80000);
-  it("Should process partial transfer for 2 same asset type inputs", transfer2Test);
-  it("Should process partial transfer for 2 different asset inputs", transfer2Test2);
-  it("Should process partial transfer for 1 input", transfer2Test3);
-})
+// describe("Partial transfer", function () {
+//   this.timeout(80000);
+//   it("Should process partial transfer for 2 same asset type inputs", transfer2Test);
+//   it("Should process partial transfer for 2 different asset inputs", transfer2Test2);
+//   it("Should process partial transfer for 1 input", transfer2Test3);
+// })
 
 // (async () => {
 //   await depositTest_Proof_and_verify()
