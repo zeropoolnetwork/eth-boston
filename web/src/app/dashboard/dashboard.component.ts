@@ -98,12 +98,16 @@ export class DashboardComponent implements OnInit {
   }
 
   private calculateUnspentBalance(pvk: any, outputs: any, nullifiers: any) {
-    return outputs.map(x => {
+    const m =  outputs.map(x => {
       const currentNullifier = (window as any).snark.utxoVRF(pvk, x);
       if (nullifiers.indexOf(currentNullifier) !== -1)
         return 0;
       return x.amount
-    }).reduce((acc, x) => acc += x)
+    });
+    if (m.length === 0) {
+      return 0;
+    }
+    return m.reduce((acc, x) => acc += x)
   }
 
   private findOwnerOutputs(encryptedOutputs: string[], privateKey: any) {
